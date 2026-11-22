@@ -7,16 +7,12 @@ export default function Header({ activeTab, setActiveTab }) {
           <div>
             <h1>NutriVision</h1>
             <p className="subtitle">
-              Food Label Regulatory &amp; Dual-Quality Analyzer (India vs. EU)
+              Food Label Safety &amp; Dual-Quality Analyzer (India vs. EU)
             </p>
           </div>
         </div>
         <div className="jurisdiction-pill">
-          <span className="flag">🇮🇳 FSSAI</span>
-          <span className="divider">vs</span>
-          <span className="flag">🇪🇺 EFSA</span>
-          <span className="divider">vs</span>
-          <span className="flag">🇺🇸 FDA</span>
+          <span>🇮🇳 India vs 🇪🇺 Europe</span>
         </div>
       </div>
 
@@ -27,8 +23,8 @@ export default function Header({ activeTab, setActiveTab }) {
           onClick={() => setActiveTab("scanner")}
         >
           <span className="tab-icon">🔍</span>
-          <span className="tab-title">Label &amp; Barcode Scanner</span>
-          <span className="tab-desc">OCR, Additives, Hidden Sugars &amp; EU Verdict</span>
+          <span className="tab-title">Scan Food Label</span>
+          <span className="tab-desc">Instant EU compliance, hidden sugars &amp; additives</span>
         </button>
 
         <button
@@ -37,8 +33,8 @@ export default function Header({ activeTab, setActiveTab }) {
           onClick={() => setActiveTab("dualQuality")}
         >
           <span className="tab-icon">⚖️</span>
-          <span className="tab-title">India vs. EU Dual-Quality</span>
-          <span className="tab-desc">10 Global Brands Side-by-Side Formulation Diff</span>
+          <span className="tab-title">India vs. EU Brand Diff</span>
+          <span className="tab-desc">Side-by-side comparison of 10 popular global foods</span>
         </button>
       </nav>
     </header>

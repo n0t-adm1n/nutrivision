@@ -1,14 +1,10 @@
+import { useState } from "react";
+
 export default function AdditivesTable({ additives }) {
+  const [showDetails, setShowDetails] = useState(false);
+
   if (!additives || additives.length === 0) {
-    return (
-      <div className="empty-additives-card">
-        <span className="empty-icon">🌱</span>
-        <h3>No Regulated Additives Flagged</h3>
-        <p>
-          No EU-banned additives, Southampton dyes, animal glazing blindspots, or high-risk chemical markers were detected in this ingredient list.
-        </p>
-      </div>
-    );
+    return null;
   }
 
   const getStatusBadge = (status) => {
@@ -20,7 +16,7 @@ export default function AdditivesTable({ additives }) {
       return <span className="status-badge restricted">{status}</span>;
     }
     if (s.includes("VEG_EXEMPT")) {
-      return <span className="status-badge blindspot">VEG-DOT EXEMPT</span>;
+      return <span className="status-badge blindspot">VEG EXEMPT</span>;
     }
     return <span className="status-badge permitted">{status}</span>;
   };
@@ -34,82 +30,79 @@ export default function AdditivesTable({ additives }) {
   };
 
   return (
-    <div className="additives-table-wrapper">
-      <div className="section-title-bar">
+    <div className="technical-section-wrapper">
+      <div className="technical-toggle-bar">
         <div>
-          <h3>Detected Additives &amp; Cross-Jurisdiction Regulatory Comparison</h3>
-          <p className="section-subtitle">
-            Comparing legally binding status and statutory limits across India (FSSAI), European Union (EFSA), and United States (FDA).
+          <h4>🔬 Advanced: Complete Regulatory &amp; Legal Citations</h4>
+          <p className="toggle-subtext">
+            Compare binding statutory citations across India (FSSAI), European Union (EFSA), and US (FDA).
           </p>
         </div>
-        <span className="count-badge">{additives.length} Additive{additives.length > 1 ? "s" : ""}</span>
+        <button
+          type="button"
+          className="btn btn-secondary toggle-btn"
+          onClick={() => setShowDetails(!showDetails)}
+        >
+          {showDetails ? "▲ Hide Legal Citations" : `▼ Show Legal Table (${additives.length} Additive${additives.length > 1 ? "s" : ""})`}
+        </button>
       </div>
 
-      <div className="table-responsive">
-        <table className="regulatory-table">
-          <thead>
-            <tr>
-              <th style={{ width: "22%" }}>Additive / INS Code</th>
-              <th style={{ width: "12%" }}>Risk Tier</th>
-              <th style={{ width: "22%" }}>🇮🇳 FSSAI (India)</th>
-              <th style={{ width: "22%" }}>🇪🇺 EU (EFSA)</th>
-              <th style={{ width: "22%" }}>🇺🇸 US (FDA)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {additives.map((item) => (
-              <tr key={item.id} className={`rule-row ${item.classification.toLowerCase()}`}>
-                <td className="additive-meta-cell">
-                  <div className="additive-name-group">
-                    <strong className="additive-name">{item.name}</strong>
-                    <span className="additive-code">{item.code}</span>
-                    <span className="additive-category">{item.category}</span>
-                    {item.matchedSnippet && (
-                      <span className="matched-snippet">
-                        Matched snippet: <code>{item.matchedSnippet}</code>
-                      </span>
-                    )}
-                  </div>
-                </td>
+      {showDetails && (
+        <div className="additives-table-wrapper">
+          <div className="table-responsive">
+            <table className="regulatory-table">
+              <thead>
+                <tr>
+                  <th style={{ width: "24%" }}>Additive / Code</th>
+                  <th style={{ width: "12%" }}>Risk Tier</th>
+                  <th style={{ width: "22%" }}>🇮🇳 India (FSSAI)</th>
+                  <th style={{ width: "22%" }}>🇪🇺 Europe (EFSA)</th>
+                  <th style={{ width: "20%" }}>🇺🇸 US (FDA)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {additives.map((item) => (
+                  <tr key={item.id} className="rule-row">
+                    <td>
+                      <div className="additive-name-group">
+                        <strong className="additive-name">{item.name}</strong>
+                        <span className="additive-code">{item.code}</span>
+                        <span className="additive-category">{item.category}</span>
+                      </div>
+                    </td>
 
-                <td className="risk-cell">
-                  {getRiskBadge(item.riskLevel)}
-                </td>
+                    <td>{getRiskBadge(item.riskLevel)}</td>
 
-                <td className="jurisdiction-cell">
-                  <div className="jurisdiction-content">
-                    {getStatusBadge(item.fssaiStatus)}
-                    <p className="cell-details">{item.fssaiDetails}</p>
-                    {item.fssaiCitation && (
-                      <span className="citation-tag">⚖️ {item.fssaiCitation}</span>
-                    )}
-                  </div>
-                </td>
+                    <td className="jurisdiction-cell">
+                      {getStatusBadge(item.fssaiStatus)}
+                      <p className="cell-details">{item.fssaiDetails}</p>
+                      {item.fssaiCitation && (
+                        <span className="citation-tag">⚖️ {item.fssaiCitation}</span>
+                      )}
+                    </td>
 
-                <td className="jurisdiction-cell highlight-eu">
-                  <div className="jurisdiction-content">
-                    {getStatusBadge(item.euStatus)}
-                    <p className="cell-details">{item.euDetails}</p>
-                    {item.euCitation && (
-                      <span className="citation-tag">⚖️ {item.euCitation}</span>
-                    )}
-                  </div>
-                </td>
+                    <td className="jurisdiction-cell highlight-eu">
+                      {getStatusBadge(item.euStatus)}
+                      <p className="cell-details">{item.euDetails}</p>
+                      {item.euCitation && (
+                        <span className="citation-tag">⚖️ {item.euCitation}</span>
+                      )}
+                    </td>
 
-                <td className="jurisdiction-cell">
-                  <div className="jurisdiction-content">
-                    {getStatusBadge(item.fdaStatus)}
-                    <p className="cell-details">{item.fdaDetails}</p>
-                    {item.fdaCitation && (
-                      <span className="citation-tag">⚖️ {item.fdaCitation}</span>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    <td className="jurisdiction-cell">
+                      {getStatusBadge(item.fdaStatus)}
+                      <p className="cell-details">{item.fdaDetails}</p>
+                      {item.fdaCitation && (
+                        <span className="citation-tag">⚖️ {item.fdaCitation}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

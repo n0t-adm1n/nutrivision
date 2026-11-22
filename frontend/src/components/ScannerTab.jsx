@@ -1,26 +1,26 @@
 import { useState } from "react";
 import axios from "axios";
 import ComplianceVerdict from "./ComplianceVerdict";
+import ConsumerSummary from "./ConsumerSummary";
 import AdditivesTable from "./AdditivesTable";
 import SampleChips from "./SampleChips";
 
 const API_BASE = "http://localhost:5000/api";
 
 const DEMO_BARCODES = [
-  { code: "8901491101837", name: "Lay's India (Potato Chips)" },
-  { code: "8901058852391", name: "Cerelac Wheat-Apple (Nestlé India)" },
-  { code: "8901764012235", name: "Maggi 2-Minute Noodles (India)" },
-  { code: "7622210449283", name: "Oreo Original (Mondelez)" },
+  { code: "8901491101837", name: "Lay's Chips (India)" },
+  { code: "8901058852391", name: "Cerelac Baby Food (India)" },
+  { code: "8901764012235", name: "Maggi Noodles (India)" },
+  { code: "7622210449283", name: "Oreo Cookies" },
 ];
 
 export default function ScannerTab({ initialText = "" }) {
-  const [inputMode, setInputMode] = useState("samples"); // "upload" | "barcode" | "samples"
+  const [inputMode, setInputMode] = useState("samples"); // "samples" | "upload" | "barcode"
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [barcodeInput, setBarcodeInput] = useState("");
   const [barcodeProduct, setBarcodeProduct] = useState(null);
 
-  // Human-in-the-loop editable text
   const [ingredientsText, setIngredientsText] = useState(
     initialText ||
       "Sugar, Acidity Regulators (INS 330), Fruit Powder (1%), Colours (INS 171, INS 110, INS 102), Maltodextrin, Stabilizer (INS 466), Artificial Sweetener (INS 955)"
@@ -34,7 +34,6 @@ export default function ScannerTab({ initialText = "" }) {
   const [error, setError] = useState("");
   const [analysisResult, setAnalysisResult] = useState(null);
 
-  // File change handler
   const handleFileChange = (e) => {
     setError("");
     const file = e.target.files?.[0];
@@ -59,7 +58,6 @@ export default function ScannerTab({ initialText = "" }) {
     setOcrConfidence(null);
   };
 
-  // OCR extraction handler
   const handleRunOcr = async () => {
     if (!imageFile) {
       setError("Please select an image file first.");
@@ -82,24 +80,19 @@ export default function ScannerTab({ initialText = "" }) {
       setOcrConfidence(response.data.confidence);
 
       if (!extracted.trim()) {
-        setError(
-          "OCR completed, but no legible text was recognized. You can type or paste the ingredient list manually below."
-        );
+        setError("OCR completed, but no legible text was recognized. You can type or paste ingredients below.");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Failed to process image with local OCR."
-      );
+      setError(err.response?.data?.error || "Failed to process image with local OCR.");
     } finally {
       setOcrLoading(false);
     }
   };
 
-  // Barcode lookup handler
   const handleBarcodeLookup = async (codeToLookup) => {
     const code = String(codeToLookup || barcodeInput).trim();
     if (!code) {
-      setError("Please enter a numeric barcode to lookup.");
+      setError("Please enter a numeric barcode.");
       return;
     }
 
@@ -119,28 +112,21 @@ export default function ScannerTab({ initialText = "" }) {
             setAnalysisResult(data.analysis);
           }
         } else {
-          setError(
-            `Product "${data.product.productName}" found, but no ingredient text was recorded in Open Food Facts. You can paste ingredients manually below.`
-          );
+          setError(`Product "${data.product.productName}" found, but no ingredients listed in database.`);
         }
       } else {
-        setError(data.message || "Product not found in Open Food Facts database.");
+        setError(data.message || "Product not found.");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.error ||
-          err.response?.data?.message ||
-          "Failed to fetch product from Open Food Facts."
-      );
+      setError(err.response?.data?.error || "Failed to fetch barcode info.");
     } finally {
       setBarcodeLoading(false);
     }
   };
 
-  // Run regulatory analysis handler
   const handleRunAnalysis = async () => {
     if (!ingredientsText.trim()) {
-      setError("Please provide or extract an ingredient list before analyzing.");
+      setError("Please enter or scan an ingredient list first.");
       return;
     }
 
@@ -153,15 +139,12 @@ export default function ScannerTab({ initialText = "" }) {
       });
       setAnalysisResult(response.data);
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Analysis failed. Please check the backend service."
-      );
+      setError(err.response?.data?.error || "Analysis failed.");
     } finally {
       setAnalysisLoading(false);
     }
   };
 
-  // Quick sample selection
   const handleSelectSample = (sampleText) => {
     setIngredientsText(sampleText);
     setError("");
@@ -170,7 +153,7 @@ export default function ScannerTab({ initialText = "" }) {
 
   return (
     <div className="scanner-tab-container">
-      {/* Input Selection Bar */}
+      {/* 1. Input Box */}
       <div className="card input-card">
         <div className="input-mode-tabs">
           <button
@@ -178,25 +161,25 @@ export default function ScannerTab({ initialText = "" }) {
             className={`mode-btn ${inputMode === "samples" ? "active" : ""}`}
             onClick={() => setInputMode("samples")}
           >
-            📋 Paste &amp; Demo Samples
+            📋 Popular Examples
           </button>
           <button
             type="button"
             className={`mode-btn ${inputMode === "upload" ? "active" : ""}`}
             onClick={() => setInputMode("upload")}
           >
-            📷 Upload Label Photo (OCR)
+            📷 Photo Upload
           </button>
           <button
             type="button"
             className={`mode-btn ${inputMode === "barcode" ? "active" : ""}`}
             onClick={() => setInputMode("barcode")}
           >
-            🏷️ Barcode (Open Food Facts)
+            🏷️ Barcode
           </button>
         </div>
 
-        {/* Mode 1: Demo Samples */}
+        {/* Mode 1: Samples */}
         {inputMode === "samples" && (
           <div className="mode-content">
             <SampleChips onSelectSample={handleSelectSample} />
@@ -210,7 +193,7 @@ export default function ScannerTab({ initialText = "" }) {
               <label htmlFor="file-input" className="file-label">
                 <span className="upload-icon">📸</span>
                 <strong>Choose a food label photo</strong>
-                <span className="file-hint">JPEG, PNG, WebP up to 5MB (Processed strictly in memory)</span>
+                <span className="file-hint">JPEG, PNG, WebP (processed strictly in memory, never saved)</span>
               </label>
               <input
                 id="file-input"
@@ -228,21 +211,16 @@ export default function ScannerTab({ initialText = "" }) {
                 </div>
                 <div className="preview-meta">
                   <span className="preview-filename">{imageFile?.name}</span>
-                  <span className="preview-filesize">
-                    ({(imageFile?.size / 1024).toFixed(1)} KB)
-                  </span>
                   <button
                     type="button"
                     className="btn btn-primary"
                     onClick={handleRunOcr}
                     disabled={ocrLoading}
                   >
-                    {ocrLoading ? "Extracting Text locally..." : "⚡ Extract Text via Local OCR"}
+                    {ocrLoading ? "Extracting text..." : "⚡ Scan Photo (OCR)"}
                   </button>
                   {ocrConfidence !== null && (
-                    <span className="ocr-badge">
-                      OCR Confidence: <strong>{ocrConfidence}%</strong>
-                    </span>
+                    <span className="ocr-badge">OCR Quality: {ocrConfidence}%</span>
                   )}
                 </div>
               </div>
@@ -250,13 +228,13 @@ export default function ScannerTab({ initialText = "" }) {
           </div>
         )}
 
-        {/* Mode 3: Barcode Lookup */}
+        {/* Mode 3: Barcode */}
         {inputMode === "barcode" && (
           <div className="mode-content barcode-section">
             <div className="barcode-input-group">
               <input
                 type="text"
-                placeholder="Enter 8 to 13 digit EAN/UPC barcode (e.g. 8901491101837)"
+                placeholder="Enter barcode number (e.g. 8901491101837)"
                 value={barcodeInput}
                 onChange={(e) => setBarcodeInput(e.target.value)}
                 className="barcode-input"
@@ -267,12 +245,12 @@ export default function ScannerTab({ initialText = "" }) {
                 onClick={() => handleBarcodeLookup(barcodeInput)}
                 disabled={barcodeLoading}
               >
-                {barcodeLoading ? "Searching..." : "Lookup Product"}
+                {barcodeLoading ? "Searching..." : "Lookup"}
               </button>
             </div>
 
             <div className="demo-barcodes-row">
-              <span className="demo-label">Demo Barcodes:</span>
+              <span className="demo-label">Quick Demos:</span>
               {DEMO_BARCODES.map((item) => (
                 <button
                   key={item.code}
@@ -299,46 +277,27 @@ export default function ScannerTab({ initialText = "" }) {
                 )}
                 <div className="product-info">
                   <h4>{barcodeProduct.productName}</h4>
-                  <p className="product-brand">Brand: {barcodeProduct.brand}</p>
-                  <div className="product-tags">
-                    {barcodeProduct.nutriScore && (
-                      <span className="nutriscore-badge">
-                        Nutri-Score: {barcodeProduct.nutriScore}
-                      </span>
-                    )}
-                    {barcodeProduct.offNovaGroup && (
-                      <span className="nova-badge">
-                        NOVA {barcodeProduct.offNovaGroup}
-                      </span>
-                    )}
-                  </div>
+                  <p className="product-brand">{barcodeProduct.brand}</p>
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {/* Human-in-the-Loop OCR & Ingredients Editor */}
+        {/* Ingredients Text Box */}
         <div className="editor-container">
           <div className="editor-header">
-            <label htmlFor="ingredients-editor" className="editor-label">
-              <span>✍️ Human-in-the-Loop Ingredients Verification</span>
-              <small className="editor-subtext">
-                Verify or fix any OCR misreads (e.g. commas, INS codes) before running regulatory checks
-              </small>
-            </label>
-            <span className="char-count">
-              {ingredientsText.length} character{ingredientsText.length !== 1 ? "s" : ""}
-            </span>
+            <span className="editor-label">Ingredients to Analyze:</span>
+            <span className="char-count">{ingredientsText.length} characters</span>
           </div>
 
           <textarea
             id="ingredients-editor"
-            rows={5}
+            rows={4}
             className="ingredients-textarea"
             value={ingredientsText}
             onChange={(e) => setIngredientsText(e.target.value)}
-            placeholder="Type or paste ingredients list here... (e.g. Sugar, Palmolein Oil, Colours (INS 102, E171), Maltodextrin, Glazing Agent (904))"
+            placeholder="Ingredients text appears here. You can edit or paste ingredients directly..."
           />
 
           {error && <div className="alert-banner error">{error}</div>}
@@ -350,7 +309,7 @@ export default function ScannerTab({ initialText = "" }) {
               onClick={handleRunAnalysis}
               disabled={analysisLoading || !ingredientsText.trim()}
             >
-              {analysisLoading ? "Running Regulatory Analyzer..." : "🚀 Run Regulatory Analysis"}
+              {analysisLoading ? "Checking Ingredients..." : "🔍 Check Ingredients"}
             </button>
             <button
               type="button"
@@ -367,177 +326,55 @@ export default function ScannerTab({ initialText = "" }) {
         </div>
       </div>
 
-      {/* Results Dashboard */}
+      {/* 2. Results Section */}
       {analysisResult && (
-        <section className="results-dashboard" aria-label="Regulatory Analysis Results">
-          {/* 1. EU Shelf Compliance Verdict Banner */}
+        <section className="results-dashboard" aria-label="Analysis Results">
+          {/* Main Verdict Banner */}
           <ComplianceVerdict compliance={analysisResult.euCompliance} />
 
-          {/* 2. Key Metrics Summary Grid */}
-          <div className="metrics-grid">
-            <div className="metric-card">
-              <span className="metric-title">Flagged Additives</span>
-              <strong className="metric-value">
-                {analysisResult.summaryMetrics.totalFlaggedAdditives}
+          {/* Quick Metrics Bar */}
+          <div className="quick-metrics-row">
+            <div className="quick-metric">
+              <span className="qm-label">EU Banned</span>
+              <strong className={`qm-val ${analysisResult.summaryMetrics.euBannedCount > 0 ? "danger" : "safe"}`}>
+                {analysisResult.summaryMetrics.euBannedCount > 0 ? "Yes (Banned)" : "None"}
               </strong>
-              <span className="metric-sub">
-                {analysisResult.summaryMetrics.euBannedCount > 0
-                  ? `${analysisResult.summaryMetrics.euBannedCount} EU-Banned`
-                  : "0 EU-Banned"}
-              </span>
             </div>
 
-            <div className="metric-card">
-              <span className="metric-title">Hidden Sugars</span>
-              <strong className="metric-value">
-                {analysisResult.summaryMetrics.hiddenSugarsCount}
+            <div className="quick-metric">
+              <span className="qm-label">Child Warning</span>
+              <strong className={`qm-val ${analysisResult.summaryMetrics.annexVDyeCount > 0 ? "warn" : "safe"}`}>
+                {analysisResult.summaryMetrics.annexVDyeCount > 0 ? "Required" : "None"}
               </strong>
-              <span
-                className={`metric-sub ${
-                  analysisResult.hiddenSugars.sugarSplittingDetected ? "warn" : ""
-                }`}
-              >
-                {analysisResult.hiddenSugars.sugarSplittingDetected
-                  ? "Sugar Splitting Detected!"
-                  : "Single or no added sugar"}
-              </span>
             </div>
 
-            <div className="metric-card">
-              <span className="metric-title">Veg-Dot Blindspots</span>
-              <strong className="metric-value">
-                {analysisResult.summaryMetrics.vegBlindspotCount}
+            <div className="quick-metric">
+              <span className="qm-label">Sugar Splitting</span>
+              <strong className={`qm-val ${analysisResult.hiddenSugars.sugarSplittingDetected ? "warn" : "safe"}`}>
+                {analysisResult.hiddenSugars.sugarSplittingDetected ? "Yes (Splitting)" : "Normal"}
               </strong>
-              <span
-                className={`metric-sub ${
-                  analysisResult.vegBlindspots.hasBlindspots ? "danger" : "safe"
-                }`}
-              >
-                {analysisResult.vegBlindspots.hasBlindspots
-                  ? "Animal/Insect Additives Present"
-                  : "No hidden animal glazes"}
-              </span>
             </div>
 
-            <div className="metric-card">
-              <span className="metric-title">NOVA Processing Tier</span>
-              <strong
-                className={`metric-value nova-${analysisResult.novaGroup.group}`}
-              >
-                Group {analysisResult.novaGroup.group}
+            <div className="quick-metric">
+              <span className="qm-label">Veg Dot Safe</span>
+              <strong className={`qm-val ${analysisResult.vegBlindspots.hasBlindspots ? "warn" : "safe"}`}>
+                {analysisResult.vegBlindspots.hasBlindspots ? "Blindspot Found" : "Safe"}
               </strong>
-              <span className="metric-sub">
-                {analysisResult.novaGroup.group === 4
-                  ? "Ultra-Processed (UPF)"
-                  : "Processed / Culinary"}
-              </span>
+            </div>
+
+            <div className="quick-metric">
+              <span className="qm-label">Processing</span>
+              <strong className={`qm-val ${analysisResult.novaGroup.group === 4 ? "danger" : "safe"}`}>
+                {analysisResult.novaGroup.group === 4 ? "Ultra-Processed" : "Whole Food"}
+              </strong>
             </div>
           </div>
 
-          {/* 3. Cross-Jurisdiction Additives Table */}
+          {/* Plain English Consumer Breakdown */}
+          <ConsumerSummary analysis={analysisResult} />
+
+          {/* Collapsible Advanced Legal Breakdown */}
           <AdditivesTable additives={analysisResult.flaggedAdditives} />
-
-          {/* 4. Hidden Sugars & Sugar Splitting Warning Card */}
-          <div className="card sugar-card">
-            <div className="card-header-bar">
-              <div className="card-title-group">
-                <span className="card-icon">🍯</span>
-                <div>
-                  <h4>Hidden Sugars &amp; Sugar Splitting Assessment</h4>
-                  <p className="card-desc">{analysisResult.hiddenSugars.explanation}</p>
-                </div>
-              </div>
-              <span
-                className={`sugar-status-pill ${
-                  analysisResult.hiddenSugars.sugarSplittingDetected ? "split" : "normal"
-                }`}
-              >
-                {analysisResult.hiddenSugars.sugarSplittingDetected
-                  ? "SUGAR SPLITTING FLAGGED"
-                  : "NORMAL DECLARATION"}
-              </span>
-            </div>
-
-            {analysisResult.hiddenSugars.detectedSugars.length > 0 && (
-              <div className="sugars-table-wrapper">
-                <table className="mini-table">
-                  <thead>
-                    <tr>
-                      <th>Identified Sweetener</th>
-                      <th>Scientific Type</th>
-                      <th>Matched in Label</th>
-                      <th>Metabolic &amp; Health Risk</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {analysisResult.hiddenSugars.detectedSugars.map((s, idx) => (
-                      <tr key={idx}>
-                        <td>
-                          <strong>{s.canonicalName}</strong>
-                        </td>
-                        <td>
-                          <span className="type-pill">{s.type}</span>
-                        </td>
-                        <td>
-                          <code>"{s.matchedAlias}"</code>
-                        </td>
-                        <td className="risk-text">{s.risk}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-
-          {/* 5. FSSAI Veg-Dot Blindspot Warning (if applicable) */}
-          {analysisResult.vegBlindspots.hasBlindspots && (
-            <div className="card veg-alert-card">
-              <div className="card-title-group">
-                <span className="card-icon">🥬⚠️</span>
-                <div>
-                  <h4>FSSAI Vegetarian Logo Blindspot Warning</h4>
-                  <p className="veg-warning-text">
-                    {analysisResult.vegBlindspots.explanation}
-                  </p>
-                </div>
-              </div>
-
-              <div className="blindspots-list">
-                {analysisResult.vegBlindspots.blindspots.map((item) => (
-                  <div key={item.id} className="blindspot-item">
-                    <span className="blindspot-tag">Animal / Insect Origin</span>
-                    <strong>
-                      {item.name} ({item.code})
-                    </strong>
-                    <p>{item.explanation}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 6. NOVA Classification Breakdown Card */}
-          <div className="card nova-card">
-            <div className="card-title-group">
-              <span className="card-icon">🏭</span>
-              <div>
-                <h4>{analysisResult.novaGroup.title}</h4>
-                <p className="card-desc">{analysisResult.novaGroup.summary}</p>
-              </div>
-            </div>
-
-            {analysisResult.novaGroup.reasons.length > 0 && (
-              <div className="nova-reasons-box">
-                <strong>Triggering Industrial Processing Indicators:</strong>
-                <ul>
-                  {analysisResult.novaGroup.reasons.map((r, i) => (
-                    <li key={i}>{r}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
         </section>
       )}
     </div>

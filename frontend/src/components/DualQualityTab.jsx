@@ -8,6 +8,7 @@ export default function DualQualityTab({ onInspectInScanner }) {
   const [selectedId, setSelectedId] = useState("lays-classic");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showFullAnalysis, setShowFullAnalysis] = useState(false);
 
   useEffect(() => {
     axios
@@ -20,8 +21,8 @@ export default function DualQualityTab({ onInspectInScanner }) {
         }
       })
       .catch((err) => {
-        console.warn("Could not fetch comparisons from backend:", err.message);
-        setError("Unable to connect to backend for live comparisons. Is the server running?");
+        console.warn("Could not fetch comparisons:", err.message);
+        setError("Unable to connect to backend for live comparisons.");
       })
       .finally(() => setLoading(false));
   }, []);
@@ -30,269 +31,177 @@ export default function DualQualityTab({ onInspectInScanner }) {
 
   return (
     <div className="dual-quality-container">
-      {/* Intro Banner */}
-      <div className="card dq-intro-card">
-        <div className="dq-intro-content">
-          <span className="dq-icon">⚖️</span>
-          <div>
-            <h2>Dual-Quality Standards: India vs. European Union</h2>
-            <p>
-              "Dual quality" refers to the practice where multinational food corporations sell products under identical global brand names and packaging, but formulate them with cheaper, more saturated fats, higher refined sugars, and synthetic dyes in developing markets like India compared to European shelves.
-            </p>
-          </div>
-        </div>
+      {/* Intro Bar */}
+      <div className="dq-compact-intro">
+        <h2>⚖️ Dual Quality: Same Brand, Different Quality</h2>
+        <p>
+          Multinational brands often sell products in India made with cheaper palm oil, synthetic chemical dyes, and higher sugar compared to the exact same brand sold in Europe.
+        </p>
       </div>
 
-      {loading && <div className="loading-spinner">Loading product comparisons...</div>}
+      {loading && <div className="loading-spinner">Loading comparisons...</div>}
       {error && <div className="alert-banner error">{error}</div>}
 
-      {/* Product Selector Bar */}
+      {/* Product Selector */}
       {products.length > 0 && (
-        <div className="product-selector-bar">
-          <label htmlFor="product-select" className="selector-label">
-            Select Global Product to Compare:
-          </label>
-          <div className="selector-grid">
+        <div className="compact-product-selector">
+          <span className="selector-title">Select a Product:</span>
+          <div className="selector-pills">
             {products.map((p) => (
               <button
                 key={p.id}
                 type="button"
-                className={`product-pill-btn ${selectedId === p.id ? "active" : ""}`}
+                className={`product-pill ${selectedId === p.id ? "active" : ""}`}
                 onClick={() => setSelectedId(p.id)}
               >
-                <span className="pill-brand">{p.brand}</span>
-                <span className="pill-name">{p.productName}</span>
+                {p.productName.split("(")[0].trim()}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Selected Product Comparison View */}
       {selectedProduct && (
-        <div className="comparison-view">
-          <div className="product-banner">
+        <div className="compact-comparison-card">
+          <div className="comparison-card-top">
             <div>
-              <span className="product-category">{selectedProduct.category}</span>
-              <h3 className="product-title">{selectedProduct.productName}</h3>
-              <span className="product-brand-tag">Manufacturer: {selectedProduct.brand}</span>
+              <h3>{selectedProduct.productName}</h3>
+              <span className="brand-sub">Brand: {selectedProduct.brand}</span>
             </div>
             {onInspectInScanner && selectedProduct.india.keyIngredients && (
               <button
                 type="button"
-                className="btn btn-secondary inspect-btn"
-                onClick={() =>
-                  onInspectInScanner(selectedProduct.india.keyIngredients)
-                }
+                className="btn btn-primary btn-sm"
+                onClick={() => onInspectInScanner(selectedProduct.india.keyIngredients)}
               >
-                🔍 Analyze Indian Recipe in Scanner
+                🔍 Test Indian Recipe in Scanner
               </button>
             )}
           </div>
 
-          {/* Side-by-Side Dual Quality Diff Cards */}
-          <div className="diff-grid">
-            {/* India Formulation Card */}
-            <div className="diff-card india-card">
-              <div className="diff-card-header">
-                <span className="flag-icon">🇮🇳</span>
-                <div>
-                  <h4>{selectedProduct.india.marketName}</h4>
-                  <span className="market-tag">FSSAI Regulatory Jurisdiction</span>
-                </div>
-              </div>
-
-              <div className="diff-metrics">
-                <div className="diff-metric-row">
-                  <span className="metric-label">Primary Frying / Fat Base</span>
-                  <strong className="metric-val danger">
-                    {selectedProduct.india.oilBase}
-                  </strong>
-                </div>
-
-                <div className="diff-metric-row">
-                  <span className="metric-label">Sugar per 100g</span>
-                  <strong className="metric-val">
-                    {selectedProduct.india.sugarPer100g}g
-                  </strong>
-                  <div className="sugar-bar-track">
-                    <div
-                      className="sugar-bar-fill india"
-                      style={{
-                        width: `${Math.min(100, (selectedProduct.india.sugarPer100g / 60) * 100)}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {selectedProduct.india.saturatedFatPer100g && (
-                  <div className="diff-metric-row">
-                    <span className="metric-label">Saturated Fat per 100g</span>
-                    <strong className="metric-val danger">
-                      {selectedProduct.india.saturatedFatPer100g}
-                    </strong>
-                  </div>
-                )}
-
-                <div className="diff-metric-row">
-                  <span className="metric-label">Nutri-Score &amp; NOVA</span>
-                  <div className="badges-group">
-                    <span className="badge-score score-e">
-                      Nutri-Score {selectedProduct.india.nutriScore}
-                    </span>
-                    <span className="badge-score nova-4">
-                      NOVA {selectedProduct.india.novaGroup}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="diff-metric-row">
-                  <span className="metric-label">Flagged Additives / Dyes</span>
-                  <div className="flagged-tags">
-                    {selectedProduct.india.flaggedAdditives.map((flag, idx) => (
-                      <span key={idx} className="flag-tag danger">
-                        {flag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="ingredients-box">
-                <strong>Pack Ingredient List:</strong>
-                <p>{selectedProduct.india.keyIngredients}</p>
-              </div>
-
-              <div className="notes-box">
-                <strong>Market Reality:</strong>
-                <p>{selectedProduct.india.regulatoryNotes}</p>
-              </div>
-            </div>
-
-            {/* EU / UK Formulation Card */}
-            <div className="diff-card eu-card">
-              <div className="diff-card-header">
-                <span className="flag-icon">🇪🇺 / 🇬🇧</span>
-                <div>
-                  <h4>{selectedProduct.eu.marketName}</h4>
-                  <span className="market-tag">EFSA &amp; UK FSA Regulatory Jurisdiction</span>
-                </div>
-              </div>
-
-              <div className="diff-metrics">
-                <div className="diff-metric-row">
-                  <span className="metric-label">Primary Frying / Fat Base</span>
-                  <strong className="metric-val success">
-                    {selectedProduct.eu.oilBase}
-                  </strong>
-                </div>
-
-                <div className="diff-metric-row">
-                  <span className="metric-label">Sugar per 100g</span>
-                  <strong className="metric-val">
-                    {selectedProduct.eu.sugarPer100g}g
-                  </strong>
-                  <div className="sugar-bar-track">
-                    <div
-                      className="sugar-bar-fill eu"
-                      style={{
-                        width: `${Math.min(100, (selectedProduct.eu.sugarPer100g / 60) * 100)}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {selectedProduct.eu.saturatedFatPer100g && (
-                  <div className="diff-metric-row">
-                    <span className="metric-label">Saturated Fat per 100g</span>
-                    <strong className="metric-val success">
-                      {selectedProduct.eu.saturatedFatPer100g}
-                    </strong>
-                  </div>
-                )}
-
-                <div className="diff-metric-row">
-                  <span className="metric-label">Nutri-Score &amp; NOVA</span>
-                  <div className="badges-group">
-                    <span
-                      className={`badge-score score-${selectedProduct.eu.nutriScore.toLowerCase()}`}
-                    >
-                      Nutri-Score {selectedProduct.eu.nutriScore}
-                    </span>
-                    <span className="badge-score nova-3">
-                      NOVA {selectedProduct.eu.novaGroup}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="diff-metric-row">
-                  <span className="metric-label">Flagged Additives / Dyes</span>
-                  <div className="flagged-tags">
-                    {selectedProduct.eu.flaggedAdditives.length > 0 ? (
-                      selectedProduct.eu.flaggedAdditives.map((flag, idx) => (
-                        <span key={idx} className="flag-tag warning">
-                          {flag}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="flag-tag clean">
-                        Clean Label (No Annex V dyes or banned additives)
-                      </span>
+          {/* Quick Comparison Table */}
+          <div className="table-responsive">
+            <table className="comparison-matrix-table">
+              <thead>
+                <tr>
+                  <th style={{ width: "25%" }}>Comparison Factor</th>
+                  <th style={{ width: "37%" }}>🇮🇳 Indian Market Pack</th>
+                  <th style={{ width: "38%" }}>🇪🇺 European / UK Pack</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>🛢️ Oil &amp; Fat Quality</strong>
+                  </td>
+                  <td className="diff-highlight-danger">
+                    <strong>{selectedProduct.india.oilBase}</strong>
+                    {selectedProduct.india.saturatedFatPer100g && (
+                      <span className="sub-stat">Sat Fat: {selectedProduct.india.saturatedFatPer100g}</span>
                     )}
-                  </div>
-                </div>
-              </div>
+                  </td>
+                  <td className="diff-highlight-success">
+                    <strong>{selectedProduct.eu.oilBase}</strong>
+                    {selectedProduct.eu.saturatedFatPer100g && (
+                      <span className="sub-stat">Sat Fat: {selectedProduct.eu.saturatedFatPer100g}</span>
+                    )}
+                  </td>
+                </tr>
 
-              <div className="ingredients-box">
-                <strong>Pack Ingredient List:</strong>
-                <p>{selectedProduct.eu.keyIngredients}</p>
-              </div>
+                <tr>
+                  <td>
+                    <strong>🍬 Sugar per 100g</strong>
+                  </td>
+                  <td className="diff-highlight-danger">
+                    <strong className="stat-number">{selectedProduct.india.sugarPer100g}g</strong>
+                  </td>
+                  <td className="diff-highlight-success">
+                    <strong className="stat-number">{selectedProduct.eu.sugarPer100g}g</strong>
+                  </td>
+                </tr>
 
-              <div className="notes-box">
-                <strong>European Standard:</strong>
-                <p>{selectedProduct.eu.regulatoryNotes}</p>
-              </div>
-            </div>
+                <tr>
+                  <td>
+                    <strong>🎨 Colors &amp; Additives</strong>
+                  </td>
+                  <td>
+                    {selectedProduct.india.flaggedAdditives.length > 0 ? (
+                      <div className="additive-badge-list">
+                        {selectedProduct.india.flaggedAdditives.map((f, i) => (
+                          <span key={i} className="mini-badge-warn">{f}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span>None</span>
+                    )}
+                  </td>
+                  <td>
+                    {selectedProduct.eu.flaggedAdditives.length > 0 ? (
+                      <div className="additive-badge-list">
+                        {selectedProduct.eu.flaggedAdditives.map((f, i) => (
+                          <span key={i} className="mini-badge-clean">{f}</span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="mini-badge-clean">Clean Formula (Natural Extracts)</span>
+                    )}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <strong>📊 Health Score (Nutri-Score)</strong>
+                  </td>
+                  <td>
+                    <span className={`score-pill score-${selectedProduct.india.nutriScore.toLowerCase()}`}>
+                      Grade {selectedProduct.india.nutriScore}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`score-pill score-${selectedProduct.eu.nutriScore.toLowerCase()}`}>
+                      Grade {selectedProduct.eu.nutriScore}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          {/* Disparity & Public Health Analysis Card */}
-          <div className="card disparity-card">
-            <div className="card-header-bar">
-              <span className="card-icon">🔬</span>
-              <div>
-                <h4>Regulatory &amp; Health Disparity Analysis</h4>
-                <p className="card-desc">
-                  Key reasons why this formulation differs across borders
-                </p>
-              </div>
-            </div>
+          {/* Quick Bottom Line Summary */}
+          <div className="bottom-line-box">
+            <span className="bl-label">💡 The Bottom Line:</span>
+            <p>
+              {selectedProduct.disparityAnalysis.primaryDivergence}. {selectedProduct.disparityAnalysis.healthImplication}
+            </p>
+          </div>
 
-            <div className="disparity-grid">
-              <div className="disparity-item">
-                <span className="item-title">1. Primary Divergence Factor</span>
-                <p>{selectedProduct.disparityAnalysis.primaryDivergence}</p>
-              </div>
+          {/* Collapsible Detailed Regulatory Breakdown */}
+          <div className="detailed-toggle-box">
+            <button
+              type="button"
+              className="toggle-text-btn"
+              onClick={() => setShowFullAnalysis(!showFullAnalysis)}
+            >
+              {showFullAnalysis ? "▲ Hide Detailed Breakdown" : "▼ Read Full Regulatory Policy Explanation"}
+            </button>
 
-              <div className="disparity-item">
-                <span className="item-title">2. Sugar Content Discrepancy</span>
-                <p>{selectedProduct.disparityAnalysis.sugarDifference}</p>
+            {showFullAnalysis && (
+              <div className="full-policy-details">
+                <div className="policy-block">
+                  <strong>Why the difference?</strong>
+                  <p>{selectedProduct.disparityAnalysis.regulatoryStandardGap}</p>
+                </div>
+                <div className="policy-block">
+                  <strong>Ingredients Comparison:</strong>
+                  <p>
+                    <em>India:</em> {selectedProduct.india.keyIngredients}
+                  </p>
+                  <p>
+                    <em>Europe:</em> {selectedProduct.eu.keyIngredients}
+                  </p>
+                </div>
               </div>
-
-              <div className="disparity-item">
-                <span className="item-title">3. Additives &amp; Colorants Gap</span>
-                <p>{selectedProduct.disparityAnalysis.additiveDiscrepancy}</p>
-              </div>
-
-              <div className="disparity-item">
-                <span className="item-title">4. Regulatory Standard Driver</span>
-                <p>{selectedProduct.disparityAnalysis.regulatoryStandardGap}</p>
-              </div>
-
-              <div className="disparity-item full-width">
-                <span className="item-title danger">5. Public Health Implication for Indian Consumers</span>
-                <p>{selectedProduct.disparityAnalysis.healthImplication}</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       )}
