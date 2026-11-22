@@ -1,40 +1,53 @@
+import { ScanIcon, ScaleIcon } from "./Icons";
+
 export default function Header({ activeTab, setActiveTab }) {
   return (
     <header className="app-header">
-      <div className="header-top">
-        <div className="logo-group">
-          <div className="logo-badge">NV</div>
-          <div>
-            <h1>NutriVision</h1>
-            <p className="subtitle">
-              Food Label Safety &amp; Dual-Quality Analyzer (India vs. EU)
-            </p>
+      <div className="navbar-container">
+        <div className="brand-lockup">
+          <div className="brand-logo">
+            <span className="logo-letter">N</span>
+            <span className="logo-dot"></span>
+          </div>
+          <div className="brand-text">
+            <div className="brand-heading-row">
+              <span className="brand-name">NutriVision</span>
+              <span className="brand-tag">Regulatory AI</span>
+            </div>
+            <p className="brand-sub">Food Label Regulatory &amp; Dual-Quality Analyzer</p>
           </div>
         </div>
-        <div className="jurisdiction-pill">
-          <span>🇮🇳 India vs 🇪🇺 Europe</span>
+
+        <div className="nav-badges">
+          <div className="jurisdiction-chip">
+            <span className="chip-indicator"></span>
+            <span>FSSAI (IN) · EFSA (EU) · FDA (US)</span>
+          </div>
         </div>
       </div>
 
-      <nav className="tab-nav" aria-label="Main Navigation">
+      <nav className="segmented-control" role="tablist">
         <button
           type="button"
-          className={`tab-btn ${activeTab === "scanner" ? "active" : ""}`}
+          role="tab"
+          aria-selected={activeTab === "scanner"}
+          className={`segment-btn ${activeTab === "scanner" ? "active" : ""}`}
           onClick={() => setActiveTab("scanner")}
         >
-          <span className="tab-icon">🔍</span>
-          <span className="tab-title">Scan Food Label</span>
-          <span className="tab-desc">Instant EU compliance, hidden sugars &amp; additives</span>
+          <ScanIcon className="segment-icon" />
+          <span className="segment-text">Label &amp; Barcode Scanner</span>
         </button>
 
         <button
           type="button"
-          className={`tab-btn ${activeTab === "dualQuality" ? "active" : ""}`}
+          role="tab"
+          aria-selected={activeTab === "dualQuality"}
+          className={`segment-btn ${activeTab === "dualQuality" ? "active" : ""}`}
           onClick={() => setActiveTab("dualQuality")}
         >
-          <span className="tab-icon">⚖️</span>
-          <span className="tab-title">India vs. EU Brand Diff</span>
-          <span className="tab-desc">Side-by-side comparison of 10 popular global foods</span>
+          <ScaleIcon className="segment-icon" />
+          <span className="segment-text">India vs. EU Dual Quality</span>
+          <span className="badge-count">10 Brands</span>
         </button>
       </nav>
     </header>

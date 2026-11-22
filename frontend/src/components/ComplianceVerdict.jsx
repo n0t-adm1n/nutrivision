@@ -1,61 +1,71 @@
+import { ShieldBan, ShieldAlert, ShieldCheck } from "./Icons";
+
 export default function ComplianceVerdict({ compliance }) {
   if (!compliance) return null;
 
   const { verdict, offendingAdditives } = compliance;
 
-  const getDetails = () => {
+  const getVerdictConfig = () => {
     switch (verdict) {
       case "NON_COMPLIANT":
         return {
-          cssClass: "verdict-card danger",
-          icon: "🚫",
-          title: "BANNED ON EUROPEAN SHELVES",
-          tagline: "This product contains ingredients strictly prohibited in food across the European Union.",
-          pill: "BANNED IN EU",
+          cardClass: "verdict-banner banner-danger",
+          icon: <ShieldBan className="verdict-svg danger" />,
+          title: "Prohibited on European Shelves",
+          pill: "EU Non-Compliant",
+          pillClass: "status-pill-danger",
+          tagline: "Contains food additives banned across the European Union under Regulation (EU) 2022/63 due to genotoxicity or health hazards.",
         };
       case "RESTRICTED_WARNING_REQUIRED":
         return {
-          cssClass: "verdict-card warning",
-          icon: "⚠️",
-          title: "REQUIRES CHILD WARNING IN EUROPE",
-          tagline: "Contains artificial dyes requiring a statutory child hyperactivity warning on European labels.",
-          pill: "WARNING REQUIRED",
+          cardClass: "verdict-banner banner-warning",
+          icon: <ShieldAlert className="verdict-svg warning" />,
+          title: "Mandatory Child Warning Required in EU",
+          pill: "Warning Mandated",
+          pillClass: "status-pill-warning",
+          tagline: "Contains Southampton azo dyes requiring the statutory label: 'May have an adverse effect on activity and attention in children' under Regulation (EC) 1333/2008 Annex V.",
         };
       case "COMPLIANT":
       default:
         return {
-          cssClass: "verdict-card success",
-          icon: "✅",
-          title: "MEETS EUROPEAN SAFETY STANDARDS",
-          tagline: "No EU-banned additives or restricted synthetic colorants were detected.",
-          pill: "EU COMPLIANT",
+          cardClass: "verdict-banner banner-success",
+          icon: <ShieldCheck className="verdict-svg success" />,
+          title: "Meets European Union Safety Standards",
+          pill: "EU Compliant",
+          pillClass: "status-pill-success",
+          tagline: "No EU-banned additives or restricted synthetic colorants requiring child hyperactivity warnings were detected.",
         };
     }
   };
 
-  const info = getDetails();
+  const config = getVerdictConfig();
 
   return (
-    <div className={info.cssClass}>
-      <div className="verdict-main">
-        <span className="verdict-icon">{info.icon}</span>
-        <div className="verdict-text">
-          <div className="verdict-title-row">
-            <h2>{info.title}</h2>
-            <span className={`verdict-pill ${verdict.toLowerCase()}`}>{info.pill}</span>
+    <div className={config.cardClass}>
+      <div className="verdict-top-bar">
+        <div className="verdict-icon-container">
+          {config.icon}
+        </div>
+        <div className="verdict-text-block">
+          <div className="verdict-heading-line">
+            <span className="verdict-title">{config.title}</span>
+            <span className={`status-pill ${config.pillClass}`}>{config.pill}</span>
           </div>
-          <p className="verdict-tagline">{info.tagline}</p>
+          <p className="verdict-description">{config.tagline}</p>
         </div>
       </div>
 
       {offendingAdditives && offendingAdditives.length > 0 && (
-        <div className="verdict-chips">
-          <span className="chips-label">Flagged Substance{offendingAdditives.length > 1 ? "s" : ""}:</span>
-          {offendingAdditives.map((item) => (
-            <span key={item.id} className="offender-chip">
-              <strong>{item.name}</strong> ({item.code})
-            </span>
-          ))}
+        <div className="verdict-footer-chips">
+          <span className="chips-title">Triggering Substance{offendingAdditives.length > 1 ? "s" : ""}:</span>
+          <div className="chips-list">
+            {offendingAdditives.map((item) => (
+              <span key={item.id} className="flagged-chip">
+                <span className="chip-code">{item.code}</span>
+                <span className="chip-name">{item.name}</span>
+              </span>
+            ))}
+          </div>
         </div>
       )}
     </div>

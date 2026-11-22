@@ -4,6 +4,7 @@ import ComplianceVerdict from "./ComplianceVerdict";
 import ConsumerSummary from "./ConsumerSummary";
 import AdditivesTable from "./AdditivesTable";
 import SampleChips from "./SampleChips";
+import { CameraIcon, BarcodeIcon, SparklesIcon, ScanIcon } from "./Icons";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -112,7 +113,7 @@ export default function ScannerTab({ initialText = "" }) {
             setAnalysisResult(data.analysis);
           }
         } else {
-          setError(`Product "${data.product.productName}" found, but no ingredients listed in database.`);
+          setError(`Product "${data.product.productName}" found, but no ingredients listed in Open Food Facts.`);
         }
       } else {
         setError(data.message || "Product not found.");
@@ -152,76 +153,84 @@ export default function ScannerTab({ initialText = "" }) {
   };
 
   return (
-    <div className="scanner-tab-container">
-      {/* 1. Input Box */}
-      <div className="card input-card">
-        <div className="input-mode-tabs">
+    <div className="scanner-container">
+      {/* 1. Main Ingestion Surface */}
+      <div className="surface-card ingestion-card">
+        {/* Sub-Tabs for Input Method */}
+        <div className="mode-segmented-bar">
           <button
             type="button"
-            className={`mode-btn ${inputMode === "samples" ? "active" : ""}`}
+            className={`mode-pill ${inputMode === "samples" ? "active" : ""}`}
             onClick={() => setInputMode("samples")}
           >
-            📋 Popular Examples
+            <SparklesIcon className="mode-icon" />
+            <span>Preset Examples</span>
           </button>
           <button
             type="button"
-            className={`mode-btn ${inputMode === "upload" ? "active" : ""}`}
+            className={`mode-pill ${inputMode === "upload" ? "active" : ""}`}
             onClick={() => setInputMode("upload")}
           >
-            📷 Photo Upload
+            <CameraIcon className="mode-icon" />
+            <span>Upload Photo (OCR)</span>
           </button>
           <button
             type="button"
-            className={`mode-btn ${inputMode === "barcode" ? "active" : ""}`}
+            className={`mode-pill ${inputMode === "barcode" ? "active" : ""}`}
             onClick={() => setInputMode("barcode")}
           >
-            🏷️ Barcode
+            <BarcodeIcon className="mode-icon" />
+            <span>Barcode Lookup</span>
           </button>
         </div>
 
-        {/* Mode 1: Samples */}
+        {/* Mode 1: Presets */}
         {inputMode === "samples" && (
-          <div className="mode-content">
+          <div className="mode-pane">
             <SampleChips onSelectSample={handleSelectSample} />
           </div>
         )}
 
         {/* Mode 2: Photo Upload */}
         {inputMode === "upload" && (
-          <div className="mode-content upload-section">
-            <div className="upload-box">
-              <label htmlFor="file-input" className="file-label">
-                <span className="upload-icon">📸</span>
-                <strong>Choose a food label photo</strong>
-                <span className="file-hint">JPEG, PNG, WebP (processed strictly in memory, never saved)</span>
+          <div className="mode-pane">
+            <div className="dropzone-box">
+              <label htmlFor="file-input" className="dropzone-label">
+                <div className="dropzone-icon-circle">
+                  <CameraIcon className="dropzone-icon" />
+                </div>
+                <div className="dropzone-text">
+                  <span className="dropzone-main">Click or drop food packaging label photo</span>
+                  <span className="dropzone-sub">Supports JPEG, PNG, WebP up to 5MB · Strictly in-memory OCR</span>
+                </div>
               </label>
               <input
                 id="file-input"
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
                 onChange={handleFileChange}
-                className="hidden-file-input"
+                className="sr-only"
               />
             </div>
 
             {previewUrl && (
-              <div className="preview-row">
-                <div className="preview-thumbnail">
-                  <img src={previewUrl} alt="Label preview" />
-                </div>
-                <div className="preview-meta">
-                  <span className="preview-filename">{imageFile?.name}</span>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={handleRunOcr}
-                    disabled={ocrLoading}
-                  >
-                    {ocrLoading ? "Extracting text..." : "⚡ Scan Photo (OCR)"}
-                  </button>
-                  {ocrConfidence !== null && (
-                    <span className="ocr-badge">OCR Quality: {ocrConfidence}%</span>
-                  )}
+              <div className="preview-card">
+                <img src={previewUrl} alt="Label preview" className="preview-img" />
+                <div className="preview-info">
+                  <span className="preview-name">{imageFile?.name}</span>
+                  <div className="preview-actions">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      onClick={handleRunOcr}
+                      disabled={ocrLoading}
+                    >
+                      {ocrLoading ? "Extracting text locally..." : "Extract Text via Local OCR"}
+                    </button>
+                    {ocrConfidence !== null && (
+                      <span className="quality-pill">Quality: {ocrConfidence}%</span>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -230,14 +239,14 @@ export default function ScannerTab({ initialText = "" }) {
 
         {/* Mode 3: Barcode */}
         {inputMode === "barcode" && (
-          <div className="mode-content barcode-section">
-            <div className="barcode-input-group">
+          <div className="mode-pane">
+            <div className="search-bar-row">
               <input
                 type="text"
-                placeholder="Enter barcode number (e.g. 8901491101837)"
+                placeholder="Enter 8 to 13 digit EAN/UPC barcode..."
                 value={barcodeInput}
                 onChange={(e) => setBarcodeInput(e.target.value)}
-                className="barcode-input"
+                className="search-input"
               />
               <button
                 type="button"
@@ -245,75 +254,81 @@ export default function ScannerTab({ initialText = "" }) {
                 onClick={() => handleBarcodeLookup(barcodeInput)}
                 disabled={barcodeLoading}
               >
-                {barcodeLoading ? "Searching..." : "Lookup"}
+                {barcodeLoading ? "Searching..." : "Lookup Barcode"}
               </button>
             </div>
 
-            <div className="demo-barcodes-row">
-              <span className="demo-label">Quick Demos:</span>
-              {DEMO_BARCODES.map((item) => (
-                <button
-                  key={item.code}
-                  type="button"
-                  className="demo-barcode-btn"
-                  onClick={() => {
-                    setBarcodeInput(item.code);
-                    handleBarcodeLookup(item.code);
-                  }}
-                >
-                  {item.name}
-                </button>
-              ))}
+            <div className="preset-barcodes-row">
+              <span className="preset-tag-label">Popular Indian Foods:</span>
+              <div className="preset-barcode-chips">
+                {DEMO_BARCODES.map((item) => (
+                  <button
+                    key={item.code}
+                    type="button"
+                    className="barcode-chip"
+                    onClick={() => {
+                      setBarcodeInput(item.code);
+                      handleBarcodeLookup(item.code);
+                    }}
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {barcodeProduct && (
-              <div className="barcode-product-card">
+              <div className="product-match-card">
                 {barcodeProduct.imageUrl && (
                   <img
                     src={barcodeProduct.imageUrl}
                     alt={barcodeProduct.productName}
-                    className="product-thumb"
+                    className="product-match-thumb"
                   />
                 )}
-                <div className="product-info">
-                  <h4>{barcodeProduct.productName}</h4>
-                  <p className="product-brand">{barcodeProduct.brand}</p>
+                <div className="product-match-details">
+                  <span className="match-title">{barcodeProduct.productName}</span>
+                  <span className="match-brand">Brand: {barcodeProduct.brand}</span>
                 </div>
               </div>
             )}
           </div>
         )}
 
-        {/* Ingredients Text Box */}
-        <div className="editor-container">
-          <div className="editor-header">
-            <span className="editor-label">Ingredients to Analyze:</span>
-            <span className="char-count">{ingredientsText.length} characters</span>
+        {/* Ingredients Textarea (Human-in-the-Loop) */}
+        <div className="verification-zone">
+          <div className="verification-header">
+            <div className="verification-title-group">
+              <span className="field-label">Ingredients Declaration</span>
+              <span className="field-hint">Edit to correct OCR typos or paste raw label text</span>
+            </div>
+            <span className="char-badge">{ingredientsText.length} chars</span>
           </div>
 
           <textarea
             id="ingredients-editor"
             rows={4}
-            className="ingredients-textarea"
+            className="editor-textarea"
             value={ingredientsText}
             onChange={(e) => setIngredientsText(e.target.value)}
-            placeholder="Ingredients text appears here. You can edit or paste ingredients directly..."
+            placeholder="Ingredient declaration will appear here..."
           />
 
-          {error && <div className="alert-banner error">{error}</div>}
+          {error && <div className="toast-error">{error}</div>}
 
-          <div className="editor-actions">
+          <div className="action-row">
             <button
               type="button"
-              className="btn btn-analyze"
+              className="btn btn-glow-primary"
               onClick={handleRunAnalysis}
               disabled={analysisLoading || !ingredientsText.trim()}
             >
-              {analysisLoading ? "Checking Ingredients..." : "🔍 Check Ingredients"}
+              <ScanIcon className="btn-icon" />
+              <span>{analysisLoading ? "Running Regulatory Analyzer..." : "Analyze Regulatory Compliance"}</span>
             </button>
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-ghost"
               onClick={() => {
                 setIngredientsText("");
                 setAnalysisResult(null);
@@ -326,54 +341,54 @@ export default function ScannerTab({ initialText = "" }) {
         </div>
       </div>
 
-      {/* 2. Results Section */}
+      {/* 2. Analysis Results Surface */}
       {analysisResult && (
-        <section className="results-dashboard" aria-label="Analysis Results">
+        <section className="results-surface" aria-label="Regulatory Compliance Report">
           {/* Main Verdict Banner */}
           <ComplianceVerdict compliance={analysisResult.euCompliance} />
 
-          {/* Quick Metrics Bar */}
-          <div className="quick-metrics-row">
-            <div className="quick-metric">
-              <span className="qm-label">EU Banned</span>
-              <strong className={`qm-val ${analysisResult.summaryMetrics.euBannedCount > 0 ? "danger" : "safe"}`}>
-                {analysisResult.summaryMetrics.euBannedCount > 0 ? "Yes (Banned)" : "None"}
+          {/* Clean Metric Stat Bar */}
+          <div className="stats-row">
+            <div className="stat-pill">
+              <span className="stat-label">EU Banned</span>
+              <strong className={`stat-value ${analysisResult.summaryMetrics.euBannedCount > 0 ? "val-danger" : "val-safe"}`}>
+                {analysisResult.summaryMetrics.euBannedCount > 0 ? "Banned in EU" : "None"}
               </strong>
             </div>
 
-            <div className="quick-metric">
-              <span className="qm-label">Child Warning</span>
-              <strong className={`qm-val ${analysisResult.summaryMetrics.annexVDyeCount > 0 ? "warn" : "safe"}`}>
+            <div className="stat-pill">
+              <span className="stat-label">Child Warning</span>
+              <strong className={`stat-value ${analysisResult.summaryMetrics.annexVDyeCount > 0 ? "val-warn" : "val-safe"}`}>
                 {analysisResult.summaryMetrics.annexVDyeCount > 0 ? "Required" : "None"}
               </strong>
             </div>
 
-            <div className="quick-metric">
-              <span className="qm-label">Sugar Splitting</span>
-              <strong className={`qm-val ${analysisResult.hiddenSugars.sugarSplittingDetected ? "warn" : "safe"}`}>
-                {analysisResult.hiddenSugars.sugarSplittingDetected ? "Yes (Splitting)" : "Normal"}
+            <div className="stat-pill">
+              <span className="stat-label">Sugar Splitting</span>
+              <strong className={`stat-value ${analysisResult.hiddenSugars.sugarSplittingDetected ? "val-warn" : "val-safe"}`}>
+                {analysisResult.hiddenSugars.sugarSplittingDetected ? "Detected" : "Standard"}
               </strong>
             </div>
 
-            <div className="quick-metric">
-              <span className="qm-label">Veg Dot Safe</span>
-              <strong className={`qm-val ${analysisResult.vegBlindspots.hasBlindspots ? "warn" : "safe"}`}>
+            <div className="stat-pill">
+              <span className="stat-label">Veg Dot Safe</span>
+              <strong className={`stat-value ${analysisResult.vegBlindspots.hasBlindspots ? "val-warn" : "val-safe"}`}>
                 {analysisResult.vegBlindspots.hasBlindspots ? "Blindspot Found" : "Safe"}
               </strong>
             </div>
 
-            <div className="quick-metric">
-              <span className="qm-label">Processing</span>
-              <strong className={`qm-val ${analysisResult.novaGroup.group === 4 ? "danger" : "safe"}`}>
-                {analysisResult.novaGroup.group === 4 ? "Ultra-Processed" : "Whole Food"}
+            <div className="stat-pill">
+              <span className="stat-label">NOVA Tier</span>
+              <strong className={`stat-value ${analysisResult.novaGroup.group === 4 ? "val-danger" : "val-safe"}`}>
+                {analysisResult.novaGroup.group === 4 ? "NOVA 4 (UPF)" : "Whole Food"}
               </strong>
             </div>
           </div>
 
-          {/* Plain English Consumer Breakdown */}
+          {/* Plain-Language Bento Cards */}
           <ConsumerSummary analysis={analysisResult} />
 
-          {/* Collapsible Advanced Legal Breakdown */}
+          {/* Progressive Disclosure: Full Legal Matrix */}
           <AdditivesTable additives={analysisResult.flaggedAdditives} />
         </section>
       )}
