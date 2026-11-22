@@ -1,0 +1,74 @@
+[
+  {
+    "canonicalName": "Table Sugar / Sucrose",
+    "aliases": ["Sugar", "White Sugar", "Cane Sugar", "Beet Sugar", "Refined Sugar", "Granulated Sugar", "Sucrose"],
+    "type": "Refined Disaccharide",
+    "risk": "High glycemic index, empty calories, primary contributor to obesity and dental caries."
+  },
+  {
+    "canonicalName": "Maltodextrin",
+    "aliases": ["Maltodextrin", "Maltodextrine"],
+    "type": "Hydrolyzed Starch",
+    "risk": "Glycemic index higher than table sugar (GI 110-185); rapidly spikes blood glucose, frequently used as cheap filler and carrier."
+  },
+  {
+    "canonicalName": "Liquid Glucose / Glucose Syrup",
+    "aliases": ["Liquid Glucose", "Glucose Syrup", "Glucose-Fructose Syrup", "Glucose"],
+    "type": "Concentrated Sugar Syrup",
+    "risk": "Manufactured from enzymatic hydrolysis of starch; promotes rapid insulin surge; popular industrial anti-crystallization agent."
+  },
+  {
+    "canonicalName": "Invert Sugar Syrup",
+    "aliases": ["Invert Sugar Syrup", "Invert Sugar", "Invert Syrup", "Inverted Sugar"],
+    "type": "Equimolar Glucose + Fructose",
+    "risk": "Sweeter than regular sucrose; rapidly absorbed; masks lower ingredient ranking via sugar splitting."
+  },
+  {
+    "canonicalName": "Dextrose",
+    "aliases": ["Dextrose", "Dextrose Monohydrate", "Dextrose Anhydrous"],
+    "type": "Simple Monosaccharide (D-Glucose)",
+    "risk": "Instant blood sugar elevation (GI 100); common carrier in seasoning mixes."
+  },
+  {
+    "canonicalName": "High-Fructose Corn Syrup (HFCS)",
+    "aliases": ["High-Fructose Corn Syrup", "HFCS", "High Fructose Corn Syrup", "Corn Syrup", "Corn Syrup Solids", "Isoglucose"],
+    "type": "Fructose-Enriched Corn Derivative",
+    "risk": "Strong epidemiological link to non-alcoholic fatty liver disease (NAFLD) and visceral adiposity."
+  },
+  {
+    "canonicalName": "Fructose",
+    "aliases": ["Fructose", "Crystalline Fructose", "Fruit Sugar"],
+    "type": "Monosaccharide",
+    "risk": "Metabolized directly by liver into triglycerides without triggering satiety hormone leptin."
+  },
+  {
+    "canonicalName": "Caramel Color (Caramelized Sugar)",
+    "aliases": ["Caramel Color", "Caramel Colour", "Caramel", "INS 150a", "INS 150c", "INS 150d", "E150d", "Plain Caramel"],
+    "type": "Thermal / Chemical Sugar Derivative",
+    "risk": "Formed by heating carbohydrates with ammonia/sulfites; Class IV (150d) contains 4-MeI, a potential carcinogen."
+  },
+  {
+    "canonicalName": "Malt Extract / Barley Malt",
+    "aliases": ["Malt Extract", "Barley Malt Extract", "Malt Syrup", "Barley Malt"],
+    "type": "Cereal Sugar (Maltose)",
+    "risk": "Predominantly high-glycemic maltose; frequently marketed as 'natural malt goodness' in energy drinks while delivering high sugar loads."
+  },
+  {
+    "canonicalName": "Honey & Nectars",
+    "aliases": ["Honey", "Agave Nectar", "Agave Syrup", "Maple Syrup"],
+    "type": "Natural Concentrated Sweeteners",
+    "risk": "High natural fructose density; metabolized similarly to added refined sugars despite 'natural' marketing claims."
+  },
+  {
+    "canonicalName": "Molasses & Unrefined Sugars",
+    "aliases": ["Molasses", "Treacle", "Blackstrap Molasses", "Golden Syrup", "Brown Sugar", "Jaggery", "Demerara Sugar", "Muscovado"],
+    "type": "Sugar Refining Byproduct",
+    "risk": "Still 85-95% pure sucrose and glucose; contributes heavily to total caloric and glycemic load."
+  },
+  {
+    "canonicalName": "Fruit Juice Concentrates",
+    "aliases": ["Fruit Juice Concentrate", "Apple Juice Concentrate", "Grape Juice Concentrate"],
+    "type": "Dehydrated Fruit Sugar",
+    "risk": "Industrial sweetener stripped of whole fruit fiber; functions physiologically identically to liquid sugar syrup."
+  }
+]

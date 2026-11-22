@@ -1,0 +1,372 @@
+[
+  {
+    "id": "lays-classic",
+    "productName": "Lay's Classic / Salted Potato Chips",
+    "brand": "PepsiCo",
+    "category": "Savory Snacks / Crisps",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Palmolein Oil + TBHQ (INS 319)",
+      "sugarPer100g": 1.2,
+      "saturatedFatPer100g": "14.5g (out of 34g total fat)",
+      "additivesCount": 2,
+      "flaggedAdditives": ["Palmolein Oil", "INS 319 (TBHQ)"],
+      "nutriScore": "D",
+      "novaGroup": 4,
+      "keyIngredients": "Potatoes, Edible Vegetable Oil (Palmolein), Iodized Salt, Antioxidant (INS 319 - TBHQ)",
+      "regulatoryNotes": "Uses high-saturated palmolein oil stabilized with synthetic chemical antioxidant TBHQ. FSSAI allows palmolein without explicit front-of-pack saturated fat warnings."
+    },
+    "eu": {
+      "marketName": "EU / UK (Walkers / Lay's)",
+      "oilBase": "100% High-Oleic Sunflower & Rapeseed Oil",
+      "sugarPer100g": 0.5,
+      "saturatedFatPer100g": "2.4g (out of 31g total fat)",
+      "additivesCount": 0,
+      "flaggedAdditives": [],
+      "nutriScore": "C",
+      "novaGroup": 3,
+      "keyIngredients": "Potatoes, Vegetable Oils (Sunflower, Rapeseed, in varying proportions), Salt",
+      "regulatoryNotes": "Formulated with heart-healthy polyunsaturated/monounsaturated oils; 83% lower saturated fat than Indian pack. Free of synthetic TBHQ antioxidant."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Oil Base & Saturated Fat (6x higher saturated fat in India)",
+      "sugarDifference": "Negligible direct sugar divergence, but massive difference in lipid profile.",
+      "additiveDiscrepancy": "India uses TBHQ (synthetic antioxidant); EU relies on naturally stable high-oleic seed oils without synthetic preservatives.",
+      "regulatoryStandardGap": "EU regulations and retail standards (e.g. Nutri-Score, UK HFSS legislation) penalize high saturated fat, incentivizing sunflower oil reformulation.",
+      "healthImplication": "High consumption of palmolein saturated fats elevates LDL cholesterol and atherosclerosis risks compared to the European formulation."
+    }
+  },
+  {
+    "id": "nestle-cerelac",
+    "productName": "Nestlé Cerelac (Infant Cereal - Wheat & Fruit)",
+    "brand": "Nestlé",
+    "category": "Baby & Infant Nutrition",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Low erucic rapeseed oil, High oleic sunflower oil, Coconut oil",
+      "sugarPer100g": 24.0,
+      "saturatedFatPer100g": "2.8g",
+      "additivesCount": 3,
+      "flaggedAdditives": ["Added Sucrose (Sugar)", "Maltodextrin", "Flavouring (Vanillin)"],
+      "nutriScore": "D",
+      "novaGroup": 4,
+      "keyIngredients": "Wheat flour, Milk solids, Sucrose (Added Table Sugar), Fruit juice concentrate, Minerals, Vitamins",
+      "regulatoryNotes": "Contains ~2.7g of added sucrose per serving (approx. 24g total sugar per 100g). Exposed globally by the 2024 Public Eye investigative report."
+    },
+    "eu": {
+      "marketName": "EU / UK Formulation (Germany / UK)",
+      "oilBase": "Sunflower oil, Rapeseed oil",
+      "sugarPer100g": 8.5,
+      "saturatedFatPer100g": "1.2g",
+      "additivesCount": 0,
+      "flaggedAdditives": [],
+      "nutriScore": "B",
+      "novaGroup": 2,
+      "keyIngredients": "Hydrolyzed wheat flour, Skimmed milk powder, Vegetable oils, Minerals, Vitamins (0g Added Sugar)",
+      "regulatoryNotes": "Strictly 0g added sugar. Natural sweetness originates entirely from whole grain cereals and milk lactose, adhering to European Society for Paediatric Gastroenterology recommendations."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Added Sugar in Infant Diet (~24g sugar in India vs 0g added sugar in EU)",
+      "sugarDifference": "Indian infants receive nearly 3g of added table sugar per bowl; European infants receive zero added sucrose.",
+      "additiveDiscrepancy": "Indian pack uses added sucrose and industrial maltodextrin; EU pack maintains unadulterated cereal-milk formulation.",
+      "regulatoryStandardGap": "FSSAI historically allowed upper limits of added sucrose in infant foods; EU Directive 2006/125/EC and EFSA strictly prohibit unnecessary added sugars in infant weaning foods.",
+      "healthImplication": "Early introduction to added sucrose induces sweet taste preference conditioning, accelerating early childhood obesity and dental decay."
+    }
+  },
+  {
+    "id": "fanta-orange",
+    "productName": "Fanta Orange Carbonated Beverage",
+    "brand": "The Coca-Cola Company",
+    "category": "Carbonated Soft Drinks",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "N/A (Liquid Beverage)",
+      "sugarPer100g": 10.5,
+      "saturatedFatPer100g": "0.0g",
+      "additivesCount": 5,
+      "flaggedAdditives": ["INS 110 (Sunset Yellow)", "INS 102 (Tartrazine)", "INS 330 (Acidity Regulator)", "INS 211 (Sodium Benzoate)"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Carbonated Water, Sugar (~10.5g/100ml), Acidity Regulators (INS 330), Preservative (INS 211), Synthetic Colours (INS 110, INS 102), Orange Juice Concentrate (0% - 2%)",
+      "regulatoryNotes": "Coloured with petroleum-derived synthetic azo dyes Tartrazine (102) and Sunset Yellow (110) with no statutory child hyperactivity warning."
+    },
+    "eu": {
+      "marketName": "EU / UK Formulation",
+      "oilBase": "N/A (Liquid Beverage)",
+      "sugarPer100g": 4.5,
+      "saturatedFatPer100g": "0.0g",
+      "additivesCount": 2,
+      "flaggedAdditives": [],
+      "nutriScore": "C",
+      "novaGroup": 4,
+      "keyIngredients": "Carbonated Water, Sugar (~4.5g/100ml), Orange Juice from Concentrate (8% - 12%), Citrus Extract, Natural Flavorings, Coloring Extracts (Paprika, Carrot), Sweeteners (Acesulfame-K, Sucralose)",
+      "regulatoryNotes": "Contains real orange juice (8-12%); colored with natural fruit/vegetable concentrates. Sugar reduced by over 55% due to the UK Soft Drinks Industry Levy (Sugar Tax)."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Synthetic Azo Dyes + 2.3x Higher Sugar in India",
+      "sugarDifference": "10.5g sugar/100ml in India vs 4.5g/100ml in EU/UK.",
+      "additiveDiscrepancy": "India uses INS 110 and INS 102 (Southampton Dyes); EU formulation completely avoids Annex V dyes, coloring with carrot/paprika extract.",
+      "regulatoryStandardGap": "UK/EU Sugar Tax forced recipe reformulations, and Regulation (EC) 1333/2008 Annex V mandated child warning labels that made azo dyes commercial liabilities in Europe.",
+      "healthImplication": "Higher glycemic stress, risk of hyperactivity in children, and lack of genuine fruit juice content in the Indian market."
+    }
+  },
+  {
+    "id": "nutella-hazelnut",
+    "productName": "Nutella Hazelnut Spread with Cocoa",
+    "brand": "Ferrero",
+    "category": "Sweet Spreads / Confectionery",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Palm Oil (Conventional Non-Segregated)",
+      "sugarPer100g": 57.5,
+      "saturatedFatPer100g": "10.6g",
+      "additivesCount": 3,
+      "flaggedAdditives": ["Sugar", "Palm Oil", "INS 322 (Lecithin)", "Synthetic Vanillin"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Sugar, Palm Oil, Hazelnuts (13%), Skimmed Milk Powder (8.7%), Low Fat Cocoa Powder (7.4%), Emulsifier (Lecithin INS 322), Synthetic Flavouring (Vanillin)",
+      "regulatoryNotes": "Higher total sugar content, manufactured using standard Indian refining standards with synthetic vanillin."
+    },
+    "eu": {
+      "marketName": "EU Formulation (Germany / Italy)",
+      "oilBase": "100% RSPO-Certified Sustainable Palm Oil",
+      "sugarPer100g": 55.9,
+      "saturatedFatPer100g": "10.6g",
+      "additivesCount": 2,
+      "flaggedAdditives": ["Sugar", "Palm Oil", "Lecithins (E322)"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Sugar, Palm Oil, Hazelnuts (13%), Skimmed Milk Powder (8.7%), Fat-Reduced Cocoa (7.4%), Emulsifier: Lecithins (Soya), Vanillin (Natural Aroma)",
+      "regulatoryNotes": "Uses 100% certified segregated sustainable palm oil processed under strict EU 3-MCPD / glycidyl ester safety limits (Commission Regulation (EU) 2018/290)."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Contaminant Thresholds (3-MCPD esters) & Sourcing Standards",
+      "sugarDifference": "Modest difference (~57.5g vs ~55.9g), but both remain sugar-dense products.",
+      "additiveDiscrepancy": "EU enforces strict thermal processing temperature limits on palm oil to suppress genotoxic glycidyl fatty acid esters.",
+      "regulatoryStandardGap": "EFSA has aggressive enforceable limits for process contaminants (3-MCPD) in refined vegetable oils; Indian standard enforcement remains evolving.",
+      "healthImplication": "Exposure to industrial oil refining contaminants during childhood consumption."
+    }
+  },
+  {
+    "id": "kitkat-chocolate",
+    "productName": "KitKat 4-Finger Chocolate Wafer",
+    "brand": "Nestlé",
+    "category": "Confectionery / Chocolate",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Hydrogenated Vegetable Fats / Palm Kernel Oil blend",
+      "sugarPer100g": 48.0,
+      "saturatedFatPer100g": "16.8g",
+      "additivesCount": 4,
+      "flaggedAdditives": ["Vegetable Fat Coating", "INS 322", "INS 476 (PGPR)", "Artificial Flavor"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Sugar, Milk Solids, Refined Wheat Flour (Maida), Hydrogenated Vegetable Fats (Sesame / Palm / Palm Kernel), Cocoa Butter (Low %), Cocoa Solids, Emulsifiers (INS 322, INS 476)",
+      "regulatoryNotes": "Legally classified in India as 'Composite Chocolate' or confectionery compound coating where vegetable fats heavily displace expensive cocoa butter."
+    },
+    "eu": {
+      "marketName": "EU / UK Formulation",
+      "oilBase": "Pure Cocoa Butter (Max 5% certified vegetable fat)",
+      "sugarPer100g": 44.5,
+      "saturatedFatPer100g": "14.2g",
+      "additivesCount": 2,
+      "flaggedAdditives": ["Sugar", "Lecithins (E322)"],
+      "nutriScore": "D",
+      "novaGroup": 4,
+      "keyIngredients": "Sugar, Wheat Flour, Skimmed Milk Powder, Cocoa Mass, Cocoa Butter, Vegetable Fats (Palm, Shea), Butterfat, Emulsifier (Lecithins)",
+      "regulatoryNotes": "Complies with strict EU Chocolate Directive 2000/36/EC: must contain genuine milk chocolate with min. 25% cocoa solids and maximum 5% vegetable fat other than cocoa butter."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Real Cocoa Butter vs Vegetable Compound Fats",
+      "sugarDifference": "Indian pack is sweeter and contains fewer cocoa solids.",
+      "additiveDiscrepancy": "Indian KitKat utilizes PGPR (INS 476) and high levels of hydrogenated vegetable fats to facilitate coating at tropical temperatures without melting.",
+      "regulatoryStandardGap": "EU Chocolate Directive strictly guards the definition of 'Milk Chocolate'; Indian labelling allows vegetable fat compounds under broader chocolate categorization.",
+      "healthImplication": "Higher trans-fat/saturated fat risk profile and lower antioxidant polyphenol content."
+    }
+  },
+  {
+    "id": "cadbury-bournvita",
+    "productName": "Cadbury Bournvita (Malted Health Drink)",
+    "brand": "Mondelez International",
+    "category": "Health & Nutrition Beverages",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "N/A (Dry Granular Mix)",
+      "sugarPer100g": 37.0,
+      "saturatedFatPer100g": "1.0g",
+      "additivesCount": 5,
+      "flaggedAdditives": ["Table Sugar", "Liquid Glucose", "Maltodextrin", "INS 150c (Caramel)", "INS 500(ii)"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Cereal Extract (Barley, Wheat), Sugar (Sucrose), Cocoa Solids, Liquid Glucose, Maltodextrin, Color (INS 150c), Emulsifiers, Vitamins & Minerals",
+      "regulatoryNotes": "Subject of a major 2023-2024 notice from the National Commission for Protection of Child Rights (NCPCR) and Ministry of Commerce, forcing e-commerce platforms to delist Bournvita from the 'Health Drink' category."
+    },
+    "eu": {
+      "marketName": "EU / UK Equivalent (Ovaltine / Bournvita UK)",
+      "oilBase": "N/A (Dry Powder)",
+      "sugarPer100g": 19.5,
+      "saturatedFatPer100g": "0.6g",
+      "additivesCount": 1,
+      "flaggedAdditives": [],
+      "nutriScore": "C",
+      "novaGroup": 3,
+      "keyIngredients": "Barley Malt Extract (65%), Milk Serum Concentrate, Fat-Reduced Cocoa Powder, Minerals, Vitamins",
+      "regulatoryNotes": "Over 60% whole malt cereal solids with low added refined sucrose. Governed by strict European Regulation (EC) 1924/2006 on nutrition and health claims."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Severe Sugar Splitting (Sucrose + Liquid Glucose + Maltodextrin in India)",
+      "sugarDifference": "37g total sugar per 100g in Indian Bournvita vs under 20g in European malt beverages.",
+      "additiveDiscrepancy": "Indian recipe utilizes three distinct industrial sugar streams and Caramel III/IV coloring to simulate deep cocoa-malt tones.",
+      "regulatoryStandardGap": "EU Regulation 1924/2006 forbids deceptive marketing claims like 'growth and immunity' when a product is over 30% refined sugar.",
+      "healthImplication": "Children drinking twice-daily glasses ingest over 20g of added sugar solely from the flavored powder, promoting metabolic syndrome."
+    }
+  },
+  {
+    "id": "doritos-nacho",
+    "productName": "Doritos Nacho Cheese Tortilla Chips",
+    "brand": "PepsiCo",
+    "category": "Savory Corn Snacks",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Palmolein Oil",
+      "sugarPer100g": 4.5,
+      "saturatedFatPer100g": "11.2g",
+      "additivesCount": 7,
+      "flaggedAdditives": ["Palmolein Oil", "INS 102 (Tartrazine)", "INS 110 (Sunset Yellow)", "INS 621 (MSG)", "INS 627", "INS 631"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Corn (66%), Edible Vegetable Oil (Palmolein), Milk Solids, Iodized Salt, Spices & Condiments, Flavor Enhancers (INS 621, INS 627, INS 631), Synthetic Colours (INS 102, INS 110)",
+      "regulatoryNotes": "Heavily engineered with 3 synthetic umami flavor enhancers and 2 Southampton azo dyes without child hyperactivity warnings."
+    },
+    "eu": {
+      "marketName": "EU / UK Formulation",
+      "oilBase": "Corn Oil, Sunflower Oil, Rapeseed Oil",
+      "sugarPer100g": 2.4,
+      "saturatedFatPer100g": "2.2g",
+      "additivesCount": 3,
+      "flaggedAdditives": ["Monosodium Glutamate (E621)", "Disodium 5'-Ribonucleotides (E635)"],
+      "nutriScore": "D",
+      "novaGroup": 4,
+      "keyIngredients": "Corn (71%), Vegetable Oils (Corn, Sunflower, Rapeseed in varying proportions), Cheese Powder, Flavorings, Salt, Flavor Enhancer (E621), Color (Paprika Extract, Annatto Bixin)",
+      "regulatoryNotes": "Coloured with natural plant extracts (Paprika, Annatto); uses zero Annex V dyes. Contains 80% less saturated fat due to absence of palmolein."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Palmolein vs Seed Oils + Synthetic Dyes vs Natural Extracts",
+      "sugarDifference": "Indian pack has slightly higher added seasoning sugars.",
+      "additiveDiscrepancy": "Indian Doritos use Tartrazine (102) and Sunset Yellow (110); European Doritos color exclusively with paprika extract and annatto.",
+      "regulatoryStandardGap": "Annex V deterrents forced European snack formulators to eliminate chemical azo colorants completely.",
+      "healthImplication": "Higher cardiovascular disease risk from high palmitic saturated fat and exposure to synthetic dyes."
+    }
+  },
+  {
+    "id": "tang-orange",
+    "productName": "Tang Orange Instant Drink Mix",
+    "brand": "Mondelēz International",
+    "category": "Powdered Beverage Premix",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "N/A (Dry Powder)",
+      "sugarPer100g": 93.5,
+      "saturatedFatPer100g": "0.0g",
+      "additivesCount": 6,
+      "flaggedAdditives": ["Sugar (93%)", "INS 171 (Titanium Dioxide)", "INS 110 (Sunset Yellow)", "INS 330", "INS 466 (CMC)"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Sugar (93.5%), Acidity Regulator (INS 330), Orange Fruit Powder (0.8%), Anticaking Agent, Minerals, Stabilizer (INS 466), Colours (INS 171, INS 110)",
+      "regulatoryNotes": "Contains Titanium Dioxide (INS 171) for cloudiness/opacity and Sunset Yellow (INS 110). Banned from food sale in Europe in this composition."
+    },
+    "eu": {
+      "marketName": "EU / Western Market Formulation",
+      "oilBase": "N/A (Dry Powder)",
+      "sugarPer100g": 52.0,
+      "saturatedFatPer100g": "0.0g",
+      "additivesCount": 4,
+      "flaggedAdditives": ["Sugar", "Sucralose", "Ace-K"],
+      "nutriScore": "D",
+      "novaGroup": 4,
+      "keyIngredients": "Sugar, Citric Acid, Orange Juice Powder, Sodium Citrate, Natural Flavor, Beta-Carotene, Sweeteners (Sucralose, Acesulfame-K)",
+      "regulatoryNotes": "100% free of Titanium Dioxide (E171) in compliance with Regulation (EU) 2022/63. Colored with natural beta-carotene."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Titanium Dioxide (E171 - EU Banned) & Extreme Sugar Density",
+      "sugarDifference": "93.5% pure sugar in the Indian formulation; drink is virtually flavored sugar crystals.",
+      "additiveDiscrepancy": "Indian pack contains Titanium Dioxide (INS 171) for visual opacity, an additive completely banned in the EU due to genotoxicity concerns.",
+      "regulatoryStandardGap": "Commission Regulation (EU) 2022/63 completely prohibits E171 in all food; FSSAI continues to permit it up to 10,000 ppm.",
+      "healthImplication": "Potential genotoxicity from ingested titanium nanoparticles and immediate postprandial glucose spike."
+    }
+  },
+  {
+    "id": "maggi-noodles",
+    "productName": "Maggi 2-Minute Masala Noodles",
+    "brand": "Nestlé",
+    "category": "Instant Noodles",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Refined Palm Oil",
+      "sugarPer100g": 3.8,
+      "saturatedFatPer100g": "6.8g",
+      "additivesCount": 6,
+      "flaggedAdditives": ["Palm Oil", "INS 635 (Ribonucleotides)", "INS 150d (Caramel IV)", "INS 508", "INS 412 (Guar Gum)"],
+      "nutriScore": "D",
+      "novaGroup": 4,
+      "keyIngredients": "Noodles: Refined Wheat Flour (Maida), Palm Oil, Salt, Wheat Gluten, Mineral (Calcium Carbonate), Thickeners (INS 508, INS 412), Acidity Regulators. Masala Tastemaker: Mixed Spices, Sugar, Noodle Powder, Salt, Flavor Enhancer (INS 635), Caramel (INS 150d)",
+      "regulatoryNotes": "Fried noodle cake using 100% refined palm oil and maida (refined flour). Seasoning contains Flavor Enhancer INS 635 and Caramel Class IV (INS 150d)."
+    },
+    "eu": {
+      "marketName": "EU / UK Equivalent Instant Noodles",
+      "oilBase": "Sunflower Oil / Air-Dried / Lower Palm Oil",
+      "sugarPer100g": 1.5,
+      "saturatedFatPer100g": "1.8g",
+      "additivesCount": 3,
+      "flaggedAdditives": ["Flavor Enhancers (E621, E635)"],
+      "nutriScore": "C",
+      "novaGroup": 4,
+      "keyIngredients": "Noodles: Wheat Flour, Sunflower Oil / Rapeseed Oil, Salt, Raising Agents. Seasoning: Vegetables, Salt, Herbs, Yeast Extract, Spices",
+      "regulatoryNotes": "Significant sodium reduction to comply with UK salt targets; lower saturated fat profile through alternative vegetable oils."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Frying Oil Saturation & High Industrial Sodium Content",
+      "sugarDifference": "Indian tastemaker contains added sugar as a primary ingredient.",
+      "additiveDiscrepancy": "Indian pack relies on Caramel IV (150d, which contains 4-MEI process impurity) and Disodium 5'-Ribonucleotides for savory flavor.",
+      "regulatoryStandardGap": "UK FSA salt reduction targets aggressively forced sodium reductions of over 35% in European instant noodles.",
+      "healthImplication": "High sodium and high saturated palm oil increase hypertension and cardiovascular load."
+    }
+  },
+  {
+    "id": "oreo-cookies",
+    "productName": "Oreo Original Sandwich Cookies",
+    "brand": "Mondelēz International",
+    "category": "Biscuits / Cookies",
+    "india": {
+      "marketName": "India Formulation",
+      "oilBase": "Refined Palmolein Oil + Invert Sugar Syrup",
+      "sugarPer100g": 38.5,
+      "saturatedFatPer100g": "9.8g",
+      "additivesCount": 4,
+      "flaggedAdditives": ["Palmolein Oil", "Invert Sugar Syrup", "INS 322", "Synthetic Vanillin"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Refined Wheat Flour (Maida), Sugar, Fractionated Palmolein Oil, Invert Sugar, Cocoa Solids, Raising Agents, Iodized Salt, Emulsifier (INS 322), Synthetic Flavouring",
+      "regulatoryNotes": "Cream filling uses fractionated palmolein oil and invert sugar syrup; higher proportion of refined flour and industrial syrups."
+    },
+    "eu": {
+      "marketName": "EU Formulation",
+      "oilBase": "Palm Oil (RSPO Certified) + Rapeseed Oil",
+      "sugarPer100g": 38.0,
+      "saturatedFatPer100g": "5.4g",
+      "additivesCount": 2,
+      "flaggedAdditives": ["Sugar", "Soya Lecithins (E322)"],
+      "nutriScore": "E",
+      "novaGroup": 4,
+      "keyIngredients": "Wheat Flour, Sugar, Palm Oil, Rapeseed Oil, Fat-Reduced Cocoa Powder, Wheat Starch, Glucose-Fructose Syrup, Raising Agents, Salt, Emulsifier (Soya Lecithins), Flavouring",
+      "regulatoryNotes": "Blends palm oil with liquid rapeseed oil, cutting saturated fat nearly in half (5.4g vs 9.8g). Complies with EU trans-fat limit (<2g/100g fat)."
+    },
+    "disparityAnalysis": {
+      "primaryDivergence": "Fat Saturation Level (almost double the saturated fat in India)",
+      "sugarDifference": "Similar total sugar levels, but Indian recipe incorporates invert sugar syrup.",
+      "additiveDiscrepancy": "EU recipe uses rapeseed oil blend to lower saturated fat while Indian recipe uses 100% palmolein oil for cost optimization and ambient heat stability.",
+      "regulatoryStandardGap": "European trans-fat and saturated fat labelling pressures incentivized rapeseed oil blending.",
+      "healthImplication": "Heightened dietary intake of palmitic saturated fatty acids among regular consumers."
+    }
+  }
+]
