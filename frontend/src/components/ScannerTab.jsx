@@ -312,6 +312,9 @@ export default function ScannerTab({ initialText = "" }) {
             value={ingredientsText}
             onChange={(e) => setIngredientsText(e.target.value)}
             placeholder="Ingredient declaration will appear here..."
+            spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="off"
           />
 
           {error && <div className="toast-error">{error}</div>}
@@ -347,45 +350,7 @@ export default function ScannerTab({ initialText = "" }) {
           {/* Main Verdict Banner */}
           <ComplianceVerdict compliance={analysisResult.euCompliance} />
 
-          {/* Clean Metric Stat Bar */}
-          <div className="stats-row">
-            <div className="stat-pill">
-              <span className="stat-label">EU Banned</span>
-              <strong className={`stat-value ${analysisResult.summaryMetrics.euBannedCount > 0 ? "val-danger" : "val-safe"}`}>
-                {analysisResult.summaryMetrics.euBannedCount > 0 ? "Banned in EU" : "None"}
-              </strong>
-            </div>
-
-            <div className="stat-pill">
-              <span className="stat-label">Child Warning</span>
-              <strong className={`stat-value ${analysisResult.summaryMetrics.annexVDyeCount > 0 ? "val-warn" : "val-safe"}`}>
-                {analysisResult.summaryMetrics.annexVDyeCount > 0 ? "Required" : "None"}
-              </strong>
-            </div>
-
-            <div className="stat-pill">
-              <span className="stat-label">Sugar Splitting</span>
-              <strong className={`stat-value ${analysisResult.hiddenSugars.sugarSplittingDetected ? "val-warn" : "val-safe"}`}>
-                {analysisResult.hiddenSugars.sugarSplittingDetected ? "Detected" : "Standard"}
-              </strong>
-            </div>
-
-            <div className="stat-pill">
-              <span className="stat-label">Veg Dot Safe</span>
-              <strong className={`stat-value ${analysisResult.vegBlindspots.hasBlindspots ? "val-warn" : "val-safe"}`}>
-                {analysisResult.vegBlindspots.hasBlindspots ? "Blindspot Found" : "Safe"}
-              </strong>
-            </div>
-
-            <div className="stat-pill">
-              <span className="stat-label">NOVA Tier</span>
-              <strong className={`stat-value ${analysisResult.novaGroup.group === 4 ? "val-danger" : "val-safe"}`}>
-                {analysisResult.novaGroup.group === 4 ? "NOVA 4 (UPF)" : "Whole Food"}
-              </strong>
-            </div>
-          </div>
-
-          {/* Plain-Language Bento Cards */}
+          {/* Plain-Language Bento Cards (Single Source of Truth) */}
           <ConsumerSummary analysis={analysisResult} />
 
           {/* Progressive Disclosure: Full Legal Matrix */}

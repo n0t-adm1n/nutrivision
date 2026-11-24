@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { ScaleIcon, ChevronDown, ChevronUp, ArrowUpRight } from "./Icons";
 
@@ -43,6 +43,35 @@ export default function DualQualityTab({ onInspectInScanner }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showFullAnalysis, setShowFullAnalysis] = useState(false);
+  const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollButtons = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 4);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    updateScrollButtons();
+    const el = scrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", updateScrollButtons, { passive: true });
+    window.addEventListener("resize", updateScrollButtons);
+    return () => {
+      el.removeEventListener("scroll", updateScrollButtons);
+      window.removeEventListener("resize", updateScrollButtons);
+    };
+  }, [products, updateScrollButtons]);
+
+  const handleScroll = (direction) => {
+    if (!scrollRef.current) return;
+    const offset = 260 * direction;
+    scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+  };
 
   useEffect(() => {
     axios
@@ -73,7 +102,7 @@ export default function DualQualityTab({ onInspectInScanner }) {
         <div className="intro-text">
           <h2 className="intro-title">Corporate Dual Quality: India vs. European Union</h2>
           <p className="intro-body">
-            Multinational food brands frequently reformulate flagship products across markets. In developing jurisdictions with permissive standards like India, identical brands commonly utilize high-saturated palmolein oil, synthetic azo dyes, and higher refined sugar loads compared to their European counterparts.
+            Multinational food brands frequently tailor product formulations across regional markets. This module compares declared fat bases, total and added sugar levels, and additive mandates between FSSAI (India) and EFSA (EU/UK) product formulations.
           </p>
         </div>
       </div>
@@ -84,19 +113,43 @@ export default function DualQualityTab({ onInspectInScanner }) {
       {/* Product Selector Scroll */}
       {products.length > 0 && (
         <div className="product-scroll-container">
-          <span className="scroll-caption">Select Comparative Case Study:</span>
-          <div className="scroll-pills-row">
-            {products.map((p) => (
+          <div className="scroll-header-row">
+            <span className="scroll-caption">Select Comparative Case Study:</span>
+            <div className="carousel-nav-controls">
               <button
-                key={p.id}
                 type="button"
-                className={`product-selector-pill ${selectedId === p.id ? "active" : ""}`}
-                onClick={() => setSelectedId(p.id)}
+                className="carousel-arrow-btn"
+                onClick={() => handleScroll(-1)}
+                disabled={!canScrollLeft}
+                aria-label="Scroll left"
               >
-                <span className="pill-brand-label">{p.brand}</span>
-                <span className="pill-product-label">{p.productName.split("(")[0].trim()}</span>
+                ‹
               </button>
-            ))}
+              <button
+                type="button"
+                className="carousel-arrow-btn"
+                onClick={() => handleScroll(1)}
+                disabled={!canScrollRight}
+                aria-label="Scroll right"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+          <div className={`scroll-track-wrapper ${canScrollLeft ? "fade-left" : ""} ${canScrollRight ? "fade-right" : ""}`}>
+            <div className="scroll-pills-row" ref={scrollRef}>
+              {products.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  className={`product-selector-pill ${selectedId === p.id ? "active" : ""}`}
+                  onClick={() => setSelectedId(p.id)}
+                >
+                  <span className="pill-brand-label">{p.brand}</span>
+                  <span className="pill-product-label">{p.productName.split("(")[0].trim()}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}

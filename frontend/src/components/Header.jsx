@@ -12,7 +12,7 @@ export default function Header({ activeTab, setActiveTab }) {
           <div className="brand-text">
             <div className="brand-heading-row">
               <span className="brand-name">NutriVision</span>
-              <span className="brand-tag">Regulatory AI</span>
+              <span className="brand-tag">OCR + RULE ENGINE</span>
             </div>
             <p className="brand-sub">Food Label Regulatory &amp; Dual-Quality Analyzer</p>
           </div>

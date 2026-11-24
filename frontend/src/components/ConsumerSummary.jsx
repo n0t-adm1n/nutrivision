@@ -5,6 +5,7 @@ import {
   LeafIcon,
   FactoryIcon,
   CheckCircle2,
+  SugarIcon,
 } from "./Icons";
 
 export default function ConsumerSummary({ analysis }) {
@@ -127,11 +128,11 @@ export default function ConsumerSummary({ analysis }) {
         <div className={`bento-card ${hiddenSugars.sugarSplittingDetected ? "card-alert-amber" : "card-neutral"}`}>
           <div className="bento-card-header">
             <div className="bento-icon-wrapper">
-              <span className="custom-icon">🍬</span>
+              <SugarIcon className={`bento-icon ${hiddenSugars.sugarSplittingDetected ? "amber" : "neutral"}`} />
             </div>
             <span className="bento-category">Sugar Engineering &amp; Sweeteners</span>
-            <span className={`bento-status-tag ${hiddenSugars.sugarSplittingDetected ? "tag-amber" : "tag-neutral"}`}>
-              {hiddenSugars.sugarSplittingDetected ? "Sugar Splitting" : `${hiddenSugars.detectedCount} Sugar Source${hiddenSugars.detectedCount === 1 ? "" : "s"}`}
+            <span className={`bento-status-tag ${hiddenSugars.sugarSplittingDetected ? "tag-amber" : hiddenSugars.detectedCount > 0 ? "tag-neutral" : "tag-emerald"}`}>
+              {hiddenSugars.sugarSplittingDetected ? "Sugar Splitting" : hiddenSugars.detectedCount > 0 ? `${hiddenSugars.detectedCount} Sugar Source${hiddenSugars.detectedCount === 1 ? "" : "s"}` : "No Added Sugar"}
             </span>
           </div>
           <div className="bento-body">
