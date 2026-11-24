@@ -339,8 +339,9 @@
     "name": "Palmolein / Refined Palm Oil",
     "category": "Industrial Fat / Frying Medium",
     "aliases": [
-      "Palm Oil", "Palmolein", "Palmolein Oil", "Refined Palmolein",
-      "Fractionated Palm Oil", "Refined Palm Olein", "Hydrogenated Palm Oil"
+      "Palmolein Oil", "Refined Palmolein", "Refined Palm Olein",
+      "Fractionated Palm Oil", "Hydrogenated Palm Oil",
+      "Palm Oil", "Palmolein"
     ],
     "classification": "NOVA_4_MARKER",
     "riskLevel": "MODERATE",
@@ -599,26 +600,27 @@
   },
   {
     "id": "ins319",
-    "code": "INS 319",
+    "code": "INS 319 / E319",
     "name": "TBHQ (Tert-Butylhydroquinone)",
-    "category": "Synthetic Antioxidant",
+    "category": "Synthetic Antioxidant / Preservative",
     "aliases": [
       "INS 319", "INS319", "E 319", "E-319", "E319", "319",
-      "TBHQ", "Tert-Butylhydroquinone", "Tertiary Butylhydroquinone", "Antioxidant (319)", "Antioxidant 319"
+      "TBHQ", "Tert-Butylhydroquinone", "Tertiary Butylhydroquinone",
+      "Antioxidant (319)", "Antioxidant 319"
     ],
-    "classification": "NOVA_4_MARKER",
+    "classification": "EU_RESTRICTED",
     "riskLevel": "MODERATE",
-    "euStatus": "PERMITTED_STRICT_LIMIT",
-    "euDetails": "Authorized in fats and oils up to 200 mg/kg. Under periodic scrutiny for immunotoxic and liver effects in animal studies.",
-    "euCitation": "Regulation (EC) 1333/2008",
+    "euStatus": "RESTRICTED",
+    "euDetails": "Restricted (Category & Dosage Capped) under Regulation (EC) 1333/2008 Annex II. Authorized only in specific fats and oils for heat treatment and select snack categories up to strict maximum limits (max 200 mg/kg in fats; max 25 mg/kg in snacks). Flagged as a synthetic antioxidant and UPF marker.",
+    "euCitation": "Regulation (EC) No 1333/2008 Annex II",
     "euWarningRequired": false,
     "fssaiStatus": "PERMITTED",
-    "fssaiDetails": "Permitted in frying oils and fats up to 200 mg/kg. Standard antioxidant in Indian snacks.",
-    "fssaiCitation": "FSS Regulations 2011",
+    "fssaiDetails": "Permitted in frying oils and fats up to 200 mg/kg. Standard antioxidant in Indian packaged snacks.",
+    "fssaiCitation": "FSS (Food Products Standards and Food Additives) Regulations 2011",
     "fdaStatus": "PERMITTED",
-    "fdaDetails": "Permitted in fats up to 0.02% (200 ppm) of fat content under 21 CFR 172.185.",
+    "fdaDetails": "Permitted in fats and food up to 0.02% (200 ppm) of fat content under 21 CFR 172.185.",
     "fdaCitation": "21 CFR § 172.185",
-    "explanation": "Synthetic preservative added to frying oils (especially palmolein) to prevent rancidity during extended tropical storage.",
+    "explanation": "Synthetic chemical antioxidant added to frying oils (especially palmolein) to prevent rancidity; strictly dosage-capped in Europe due to potential immunological and cytotoxic concerns at elevated intakes.",
     "isNova4": true
   }
 ]

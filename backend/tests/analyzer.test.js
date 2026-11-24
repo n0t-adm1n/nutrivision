@@ -81,7 +81,9 @@ let passedTests = 0;
     "COMPLIANT",
     `Expected COMPLIANT because warning is present, got ${result.euCompliance.verdict}`
   );
-  console.log("  ✓ EU Verdict: COMPLIANT (Warning acknowledged)");
+  assert.strictEqual(result.euCompliance.title, "No EU-Banned Additives Detected");
+  assert.strictEqual(result.euCompliance.pill, "NO BANNED ADDITIVES");
+  console.log("  ✓ EU Verdict: COMPLIANT (Warning acknowledged, No EU-Banned Additives Detected)");
 
   passedTests++;
   console.log("--> Test 3 Passed!\n");
@@ -119,20 +121,68 @@ let passedTests = 0;
   console.log("--> Test 5 Passed!\n");
 }
 
-// Test 6: Clean / minimally processed whole food (NOVA 1)
+// Test 6: Clean natural food list (NOVA 1)
 {
   console.log("Test 6: Clean natural food list (NOVA 1)");
   const input = "100% whole grain rolled oats, chia seeds, dried blueberries";
   const result = analyzeIngredients(input);
 
   assert.strictEqual(result.euCompliance.verdict, "COMPLIANT");
+  assert.strictEqual(result.euCompliance.title, "No EU-Banned Additives Detected");
+  assert.strictEqual(result.euCompliance.pill, "NO BANNED ADDITIVES");
+  assert.strictEqual(result.euCompliance.hasRestrictedAdditives, false);
   assert.strictEqual(result.flaggedAdditives.length, 0);
   assert.strictEqual(result.hiddenSugars.detectedCount, 0);
   assert.strictEqual(result.novaGroup.group, 1);
-  console.log("  ✓ Clean Food Verified: Compliant, 0 Additives, NOVA 1");
+  console.log("  ✓ Clean Food Verified: Compliant (No Banned Additives), 0 Additives, NOVA 1");
 
   passedTests++;
   console.log("--> Test 6 Passed!\n");
+}
+
+// Test 7: TBHQ detection, EU restriction note, and exact NOVA triggers attribution
+{
+  console.log("Test 7: TBHQ Detection, EU Restriction & Exact Trigger Attribution (Verification Step 1)");
+  const input =
+    "Popped corn 88.7%, refined edible palmolein oil (tbhq) iodized salt nature identical flavour, butter table butter 0.07% and beta carotene, contains milk and it's products.";
+  const result = analyzeIngredients(input);
+
+  // 1. TBHQ must be detected
+  const tbhq = result.flaggedAdditives.find((a) => a.id === "ins319");
+  assert(tbhq, "Expected TBHQ (ins319) to be detected");
+  assert.strictEqual(tbhq.euStatus, "RESTRICTED", "Expected TBHQ euStatus to be RESTRICTED");
+  console.log("  ✓ TBHQ detected with EU status:", tbhq.euStatus);
+
+  // 2. Surfaced with EU restriction note
+  assert.strictEqual(result.euCompliance.hasRestrictedAdditives, true, "Expected hasRestrictedAdditives to be true");
+  assert(
+    result.euCompliance.cautionNote && result.euCompliance.cautionNote.includes("TBHQ"),
+    "Expected cautionNote mentioning TBHQ"
+  );
+  console.log("  ✓ EU Compliance caution note surfaced:", result.euCompliance.cautionNote);
+
+  // 3. Scientifically defensible title & pill
+  assert.strictEqual(result.euCompliance.title, "No EU-Banned Additives Detected");
+  assert.strictEqual(result.euCompliance.pill, "NO BANNED ADDITIVES");
+  console.log("  ✓ Title & Pill:", result.euCompliance.title, "/", result.euCompliance.pill);
+
+  // 4. novaTriggers explicitly includes palmolein oil, tbhq, and nature identical flavour
+  assert(
+    result.novaTriggers.includes("palmolein oil"),
+    `Expected novaTriggers to include 'palmolein oil', got: ${JSON.stringify(result.novaTriggers)}`
+  );
+  assert(
+    result.novaTriggers.includes("tbhq"),
+    `Expected novaTriggers to include 'tbhq', got: ${JSON.stringify(result.novaTriggers)}`
+  );
+  assert(
+    result.novaTriggers.includes("nature identical flavour"),
+    `Expected novaTriggers to include 'nature identical flavour', got: ${JSON.stringify(result.novaTriggers)}`
+  );
+  console.log("  ✓ novaTriggers verified:", result.novaTriggers);
+
+  passedTests++;
+  console.log("--> Test 7 Passed!\n");
 }
 
 console.log("=================================================");

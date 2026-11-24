@@ -4,6 +4,39 @@ import { ScaleIcon, ChevronDown, ChevronUp, ArrowUpRight } from "./Icons";
 
 const API_BASE = "http://localhost:5000/api";
 
+function renderOilBase(oilBase, flaggedOils = [], isEu = false) {
+  if (!oilBase || oilBase.startsWith("N/A")) {
+    return <span className="spec-val-neutral">{oilBase}</span>;
+  }
+
+  if (isEu) {
+    return <span className="spec-val-success">{oilBase}</span>;
+  }
+
+  if (!flaggedOils || flaggedOils.length === 0) {
+    return <span className="spec-val-neutral">{oilBase}</span>;
+  }
+
+  const escaped = flaggedOils.map((o) => o.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const regex = new RegExp(`(${escaped.join("|")})`, "gi");
+  const parts = oilBase.split(regex);
+
+  return (
+    <span className="spec-val-mixed">
+      {parts.map((part, i) => {
+        const isFlagged = flaggedOils.some(
+          (f) => f.toLowerCase() === part.toLowerCase()
+        );
+        return isFlagged ? (
+          <span key={i} className="spec-val-danger font-semibold">{part}</span>
+        ) : (
+          <span key={i} className="spec-val-neutral">{part}</span>
+        );
+      })}
+    </span>
+  );
+}
+
 export default function DualQualityTab({ onInspectInScanner }) {
   const [products, setProducts] = useState([]);
   const [selectedId, setSelectedId] = useState("lays-classic");
@@ -95,14 +128,14 @@ export default function DualQualityTab({ onInspectInScanner }) {
             <table className="comparison-matrix">
               <thead>
                 <tr>
-                  <th style={{ width: "24%" }}>Nutritional &amp; Formulation Factor</th>
-                  <th style={{ width: "38%" }}>
+                  <th style={{ width: "26%" }}>Nutritional &amp; Formulation Factor</th>
+                  <th style={{ width: "37%" }}>
                     <div className="jurisdiction-th">
                       <span className="flag-circle">IN</span>
                       <span>India Market Pack (FSSAI)</span>
                     </div>
                   </th>
-                  <th style={{ width: "38%" }}>
+                  <th style={{ width: "37%" }}>
                     <div className="jurisdiction-th">
                       <span className="flag-circle eu">EU</span>
                       <span>European Union / UK Pack</span>
@@ -111,33 +144,45 @@ export default function DualQualityTab({ onInspectInScanner }) {
                 </tr>
               </thead>
               <tbody>
+                {/* Row 1: Fat & Oil Base (Fix 3 & Fix 5) */}
                 <tr>
                   <td className="factor-cell">
-                    <span className="factor-title">Frying &amp; Fat Base</span>
-                    <span className="factor-sub">Lipid profile &amp; saturated fats</span>
+                    <span className="factor-title">
+                      {selectedProduct.fatRowLabel || "Fat & Oil Base"}
+                    </span>
+                    <span className="factor-sub">
+                      {selectedProduct.fatRowSublabel || "Lipid profile & saturated fats"}
+                    </span>
                   </td>
-                  <td className="diff-cell-warn">
-                    <span className="spec-val-danger">{selectedProduct.india.oilBase}</span>
+                  <td className="diff-cell-body">
+                    {renderOilBase(selectedProduct.india.oilBase, selectedProduct.india.flaggedOils, false)}
                     {selectedProduct.india.saturatedFatPer100g && (
-                      <span className="sat-fat-note">Saturated Fat: {selectedProduct.india.saturatedFatPer100g}</span>
+                      <span className="sat-fat-note">
+                        Saturated Fat: <strong className="val-danger">{selectedProduct.india.saturatedFatPer100g}</strong>
+                      </span>
                     )}
                   </td>
-                  <td className="diff-cell-safe">
-                    <span className="spec-val-success">{selectedProduct.eu.oilBase}</span>
+                  <td className="diff-cell-body">
+                    {renderOilBase(selectedProduct.eu.oilBase, [], true)}
                     {selectedProduct.eu.saturatedFatPer100g && (
-                      <span className="sat-fat-note">Saturated Fat: {selectedProduct.eu.saturatedFatPer100g}</span>
+                      <span className="sat-fat-note">
+                        Saturated Fat: <strong className="val-success">{selectedProduct.eu.saturatedFatPer100g}</strong>
+                      </span>
                     )}
                   </td>
                 </tr>
 
+                {/* Row 2: Total Sugars (per 100g) (Fix 4) */}
                 <tr>
                   <td className="factor-cell">
-                    <span className="factor-title">Sugar Density</span>
-                    <span className="factor-sub">Grams per 100g</span>
+                    <span className="factor-title">Total Sugars (per 100g)</span>
+                    <span className="factor-sub">Refined vs. naturally occurring</span>
                   </td>
-                  <td className="diff-cell-warn">
+                  <td className="diff-cell-body">
                     <div className="sugar-stat-box">
-                      <span className="sugar-number val-danger">{selectedProduct.india.sugarPer100g}g</span>
+                      <div className="sugar-val-line">
+                        <span className="sugar-number val-danger">{selectedProduct.india.sugarPer100g}g</span>
+                      </div>
                       <div className="sugar-progress-track">
                         <div
                           className="sugar-fill-in"
@@ -146,11 +191,16 @@ export default function DualQualityTab({ onInspectInScanner }) {
                           }}
                         />
                       </div>
+                      {selectedProduct.india.indiaSugarNote && (
+                        <span className="sugar-detail-note">{selectedProduct.india.indiaSugarNote}</span>
+                      )}
                     </div>
                   </td>
-                  <td className="diff-cell-safe">
+                  <td className="diff-cell-body">
                     <div className="sugar-stat-box">
-                      <span className="sugar-number val-success">{selectedProduct.eu.sugarPer100g}g</span>
+                      <div className="sugar-val-line">
+                        <span className="sugar-number val-success">{selectedProduct.eu.sugarPer100g}g</span>
+                      </div>
                       <div className="sugar-progress-track">
                         <div
                           className="sugar-fill-eu"
@@ -159,14 +209,18 @@ export default function DualQualityTab({ onInspectInScanner }) {
                           }}
                         />
                       </div>
+                      {selectedProduct.eu.euSugarNote && (
+                        <span className="sugar-detail-note">{selectedProduct.eu.euSugarNote}</span>
+                      )}
                     </div>
                   </td>
                 </tr>
 
+                {/* Row 3: Additives, Flavours & Sweeteners (Fix 3) */}
                 <tr>
                   <td className="factor-cell">
-                    <span className="factor-title">Colorings &amp; Additives</span>
-                    <span className="factor-sub">Azo dyes vs. natural extracts</span>
+                    <span className="factor-title">Additives, Flavours &amp; Sweeteners</span>
+                    <span className="factor-sub">Dyes, flavourings, emulsifiers &amp; added sugars</span>
                   </td>
                   <td>
                     {selectedProduct.india.flaggedAdditives.length > 0 ? (
@@ -192,6 +246,7 @@ export default function DualQualityTab({ onInspectInScanner }) {
                   </td>
                 </tr>
 
+                {/* Row 4: Nutri-Score Profile */}
                 <tr>
                   <td className="factor-cell">
                     <span className="factor-title">Nutritional Rating</span>
