@@ -37,6 +37,26 @@ function renderOilBase(oilBase, flaggedOils = [], isEu = false) {
   );
 }
 
+function getSugarThresholdConfig(sugarValue) {
+  const val = typeof sugarValue === "number" ? sugarValue : parseFloat(sugarValue) || 0;
+  if (val < 5) {
+    return {
+      textClass: "sugar-val-low",
+      barClass: "sugar-fill-low",
+    };
+  }
+  if (val <= 15) {
+    return {
+      textClass: "sugar-val-mid",
+      barClass: "sugar-fill-mid",
+    };
+  }
+  return {
+    textClass: "sugar-val-high",
+    barClass: "sugar-fill-high",
+  };
+}
+
 export default function DualQualityTab({ onInspectInScanner }) {
   const [products, setProducts] = useState([]);
   const [selectedId, setSelectedId] = useState("lays-classic");
@@ -45,7 +65,7 @@ export default function DualQualityTab({ onInspectInScanner }) {
   const [showFullAnalysis, setShowFullAnalysis] = useState(false);
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   const updateScrollButtons = useCallback(() => {
     const el = scrollRef.current;
@@ -56,12 +76,13 @@ export default function DualQualityTab({ onInspectInScanner }) {
   }, []);
 
   useEffect(() => {
-    updateScrollButtons();
+    const timer = setTimeout(updateScrollButtons, 50);
     const el = scrollRef.current;
-    if (!el) return;
+    if (!el) return () => clearTimeout(timer);
     el.addEventListener("scroll", updateScrollButtons, { passive: true });
     window.addEventListener("resize", updateScrollButtons);
     return () => {
+      clearTimeout(timer);
       el.removeEventListener("scroll", updateScrollButtons);
       window.removeEventListener("resize", updateScrollButtons);
     };
@@ -225,47 +246,57 @@ export default function DualQualityTab({ onInspectInScanner }) {
                   </td>
                 </tr>
 
-                {/* Row 2: Total Sugars (per 100g) (Fix 4) */}
+                {/* Row 2: Total Sugars (per 100g) (Fix 4: Dynamic Threshold Coloring) */}
                 <tr>
                   <td className="factor-cell">
                     <span className="factor-title">Total Sugars (per 100g)</span>
                     <span className="factor-sub">Refined vs. naturally occurring</span>
                   </td>
                   <td className="diff-cell-body">
-                    <div className="sugar-stat-box">
-                      <div className="sugar-val-line">
-                        <span className="sugar-number val-danger">{selectedProduct.india.sugarPer100g}g</span>
-                      </div>
-                      <div className="sugar-progress-track">
-                        <div
-                          className="sugar-fill-in"
-                          style={{
-                            width: `${Math.min(100, (selectedProduct.india.sugarPer100g / 60) * 100)}%`,
-                          }}
-                        />
-                      </div>
-                      {selectedProduct.india.indiaSugarNote && (
-                        <span className="sugar-detail-note">{selectedProduct.india.indiaSugarNote}</span>
-                      )}
-                    </div>
+                    {(() => {
+                      const cfg = getSugarThresholdConfig(selectedProduct.india.sugarPer100g);
+                      return (
+                        <div className="sugar-stat-box">
+                          <div className="sugar-val-line">
+                            <span className={`sugar-number ${cfg.textClass}`}>{selectedProduct.india.sugarPer100g}g</span>
+                          </div>
+                          <div className="sugar-progress-track">
+                            <div
+                              className={cfg.barClass}
+                              style={{
+                                width: `${Math.min(100, (selectedProduct.india.sugarPer100g / 60) * 100)}%`,
+                              }}
+                            />
+                          </div>
+                          {selectedProduct.india.indiaSugarNote && (
+                            <span className="sugar-detail-note">{selectedProduct.india.indiaSugarNote}</span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </td>
                   <td className="diff-cell-body">
-                    <div className="sugar-stat-box">
-                      <div className="sugar-val-line">
-                        <span className="sugar-number val-success">{selectedProduct.eu.sugarPer100g}g</span>
-                      </div>
-                      <div className="sugar-progress-track">
-                        <div
-                          className="sugar-fill-eu"
-                          style={{
-                            width: `${Math.min(100, (selectedProduct.eu.sugarPer100g / 60) * 100)}%`,
-                          }}
-                        />
-                      </div>
-                      {selectedProduct.eu.euSugarNote && (
-                        <span className="sugar-detail-note">{selectedProduct.eu.euSugarNote}</span>
-                      )}
-                    </div>
+                    {(() => {
+                      const cfg = getSugarThresholdConfig(selectedProduct.eu.sugarPer100g);
+                      return (
+                        <div className="sugar-stat-box">
+                          <div className="sugar-val-line">
+                            <span className={`sugar-number ${cfg.textClass}`}>{selectedProduct.eu.sugarPer100g}g</span>
+                          </div>
+                          <div className="sugar-progress-track">
+                            <div
+                              className={cfg.barClass}
+                              style={{
+                                width: `${Math.min(100, (selectedProduct.eu.sugarPer100g / 60) * 100)}%`,
+                              }}
+                            />
+                          </div>
+                          {selectedProduct.eu.euSugarNote && (
+                            <span className="sugar-detail-note">{selectedProduct.eu.euSugarNote}</span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </td>
                 </tr>
 
@@ -287,14 +318,16 @@ export default function DualQualityTab({ onInspectInScanner }) {
                     )}
                   </td>
                   <td>
-                    {selectedProduct.eu.flaggedAdditives.length > 0 ? (
+                    {selectedProduct.eu.flaggedAdditives && selectedProduct.eu.flaggedAdditives.length > 0 ? (
                       <div className="badges-flex">
                         {selectedProduct.eu.flaggedAdditives.map((f, i) => (
                           <span key={i} className="additive-chip-neutral">{f}</span>
                         ))}
                       </div>
                     ) : (
-                      <span className="clean-label-pill">Clean Label (Natural Plant Concentrates)</span>
+                      <span className="clean-label-pill">
+                        {selectedProduct.eu.cleanLabelText || "No Artificial Additives or Preservatives"}
+                      </span>
                     )}
                   </td>
                 </tr>

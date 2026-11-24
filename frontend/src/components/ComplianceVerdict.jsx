@@ -1,9 +1,9 @@
-import { ShieldBan, ShieldAlert, ShieldCheck, AlertTriangle } from "./Icons";
+import { ShieldBan, ShieldAlert, ShieldCheck } from "./Icons";
 
 export default function ComplianceVerdict({ compliance }) {
   if (!compliance) return null;
 
-  const { verdict, offendingAdditives, hasRestrictedAdditives, restrictedAdditives, cautionNote } = compliance;
+  const { verdict, offendingAdditives, hasRestrictedAdditives, restrictedAdditives } = compliance;
 
   const getVerdictConfig = () => {
     switch (verdict) {
@@ -38,9 +38,7 @@ export default function ComplianceVerdict({ compliance }) {
           ),
           title: "No EU-Banned Additives Detected",
           pill: "NO BANNED ADDITIVES",
-          pillClass: hasRestrictedAdditives
-            ? "status-pill-warning"
-            : "status-pill-success",
+          pillClass: "status-pill-clean",
           tagline:
             "No EU-prohibited additives or mandatory Annex V child-warning dyes were found in the declared text. Note: This rule engine screens declared ingredients only and does not verify laboratory limits such as heavy metals, pesticides, or dosage caps.",
         };
@@ -64,14 +62,6 @@ export default function ComplianceVerdict({ compliance }) {
             )}
           </div>
           <p className="verdict-description">{config.tagline}</p>
-
-          {/* Caution Note for Category-Restricted Additives like TBHQ */}
-          {hasRestrictedAdditives && cautionNote && (
-            <div className="caution-box">
-              <AlertTriangle className="caution-box-icon" />
-              <span>{cautionNote}</span>
-            </div>
-          )}
         </div>
       </div>
 

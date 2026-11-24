@@ -774,6 +774,12 @@ body {
   color: #fff;
 }
 
+.status-pill-clean {
+  background: var(--emerald-light);
+  color: var(--emerald-text);
+  border: 1px solid var(--emerald-border);
+}
+
 .verdict-description {
   margin: 0.35rem 0 0;
   font-size: 0.88rem;
@@ -1264,21 +1270,21 @@ body {
   position: absolute;
   top: 0;
   bottom: 0.4rem;
-  width: 32px;
+  width: 48px;
   pointer-events: none;
-  z-index: 2;
+  z-index: 5;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 
 .scroll-track-wrapper::before {
   left: 0;
-  background: linear-gradient(to right, var(--bg-base), transparent);
+  background: linear-gradient(to right, var(--bg-page, #f8fafc) 15%, transparent);
 }
 
 .scroll-track-wrapper::after {
   right: 0;
-  background: linear-gradient(to left, var(--bg-base), transparent);
+  background: linear-gradient(to left, var(--bg-page, #f8fafc) 15%, transparent);
 }
 
 .scroll-track-wrapper.fade-left::before {
@@ -1436,13 +1442,13 @@ body {
 .spec-val-danger {
   font-weight: 700;
   color: var(--rose-primary);
-  display: block;
+  display: inline;
 }
 
 .spec-val-success {
   font-weight: 700;
   color: var(--emerald-primary);
-  display: block;
+  display: inline;
 }
 
 .sat-fat-note {
@@ -1479,6 +1485,33 @@ body {
 .sugar-fill-eu {
   height: 100%;
   background: var(--emerald-primary);
+}
+
+.sugar-fill-low {
+  height: 100%;
+  background: var(--emerald-primary);
+}
+
+.sugar-fill-mid {
+  height: 100%;
+  background: var(--amber-primary);
+}
+
+.sugar-fill-high {
+  height: 100%;
+  background: var(--rose-primary);
+}
+
+.sugar-val-low {
+  color: var(--text-main);
+}
+
+.sugar-val-mid {
+  color: var(--amber-primary);
+}
+
+.sugar-val-high {
+  color: var(--rose-primary);
 }
 
 .badges-flex {
